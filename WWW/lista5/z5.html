@@ -63,18 +63,67 @@
 
       }
       function validateData() {
-         if(formm.date.value.length==0)
+         var wartosc= formm.date.value
+         if(wartosc.length==0)
         {
-           document.getElementById('blad3').innerHTML="this is invalid name";
+           document.getElementById('blad3').innerHTML="to pole nie może być puste";
+           //alert(wartosc.length);
+        }
+        else {
+         if (wartosc.length!=10) {
+            document.getElementById('blad3').innerHTML="zła długość daty";
+            //alert(wartosc.length);
+         }
+         else{
+            var n=1;
+            for (var i = 0; i < wartosc.length; i++) {
+               if ( i!=4 && i!=7&&  ( wartosc[i]<'0' || wartosc[i]>'9')  ){
+                  n=0;
+               }
+            };
+
+            if(n==1){
+               document.getElementById('blad3').innerHTML="";
+            }
+            else{
+               document.getElementById('blad3').innerHTML="podaj prawidłową datę";
+            }
+
+         }
+         
         }
       }
       
-     function validateAccount() {
-         if(formm.account.value.length==0)
-        {
-           document.getElementById('blad4').innerHTML="this is invalid name";
-        }
+
+      function validateAccount() {
+         nrb=formm.account.value
+         nrb = nrb.replace(/[^0-9]+/g, '');
+         var wagi = new Array(1, 10, 3, 30, 9, 90, 27, 76, 81, 34, 49, 5, 50, 15, 53, 45, 62, 38, 89, 17, 73, 51, 25, 56, 75, 71, 31, 19, 93, 57);
+         if (nrb.length == 26) {
+            nrb = nrb + "2521";
+            nrb = nrb.substr(2) + nrb.substr(0, 2);
+            var Z = 0;
+
+            for (var i = 0; i <30; i++) {
+               Z += nrb[29 - i] * wagi[i];
+            };
+
+            if (Z % 97 == 1) {
+               document.getElementById('blad4').innerHTML="";
+            } 
+            else {
+               document.getElementById('blad4').innerHTML="błędny numer konta";
+            }
+
+         } 
+         else {
+            document.getElementById('blad4').innerHTML="błędny numer konta";
+         }
       }
+
+
+
+
       function load() { 
          var data1 = document.getElementById("date");
          
@@ -112,20 +161,28 @@
 
    
       <label for="pesel">Pesel:</label><br>
-      <input type="text" id="pesel" name="pesel" placeholder="pesel"  />
+      <input type="text" id="pesel" name="pesel" onblur="javascript: validatePesel()" placeholder="pesel"  />
       <div id="blad2" ></div>
 
 
 
       <label for="date">Data:</label><br>
-      <input type="date" id="date" name="date"  placeholder="rrrr-mm-dd" />
+      <input type="date" 
+            id="date" 
+            name="date" 
+            oninput="
+               if(this.value.length==4  && (this.value.indexOf('-')==-1 ) ) this.value+='-';
+
+               if(this.value.length==7 && (this.value.lastIndexOf('-')==4 ) ) this.value+='-'; " 
+            onblur="javascript: validateData()" 
+            placeholder="rrrr-mm-dd" />
       <div id="blad3" ></div>
 
 
 
 
       <label for="account">Numer konta</label><br>
-      <input type="text" id="account" account="account" placeholder="numer konta" />
+      <input type="text" id="account" account="account" onblur="javascript: validateAccount()"  placeholder="numer konta" />
       <div id="blad4" ></div>
 
 
