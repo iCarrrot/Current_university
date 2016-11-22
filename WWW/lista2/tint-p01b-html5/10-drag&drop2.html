@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="jquery-1.8.2.min.js"></script>
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:15px; }
+
+#div1, #div2 {
+  float:left;
+  height: 181px;
+  width: 200px;
+  border: 3px dashed #ccc;
+  margin: 10px;
+  padding: 10px;
+}
+</style>
+<script>
+function allowDrop(e)
+{
+	e.preventDefault();
+}
+
+function drag(e)
+{
+	e.dataTransfer.setData("Text",e.target.id);
+}
+
+function drop(e)
+{
+	e.preventDefault();
+	var data=e.dataTransfer.getData("Text");
+	e.target.appendChild(document.getElementById(data));
+	return false;
+}
+</script>
+</head>
+<body>
+
+  <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="szmaragd.jpg" ondragstart="drag(event)" id="drag1" alt="Szmaragd"></div>
+  <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>  
+
+</body>
+</html>
+		

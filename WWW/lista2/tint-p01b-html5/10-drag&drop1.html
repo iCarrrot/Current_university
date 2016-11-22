@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="jquery-1.8.2.min.js"></script>
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:15px; }
+.item { float:left; width: 200px; }
+#auta { float:left; width:210px; border: 3px dashed #ccc; margin: 10px; padding: 10px; }
+.wybrane { float:left; width:210px; border: 3px dashed #ccc; margin: 10px; padding: 10px; height: 800px;}
+}
+</style>
+<script>
+function allowDrop(e)
+{
+	e.preventDefault();
+	return false;
+}
+
+function drag(e)
+{
+	e.dataTransfer.setData("Text",e.target.id);
+}
+
+function dropTekst(e)
+{
+	var data=e.dataTransfer.getData("Text");
+	var liItem = document.createElement("li");
+	liItem.innerHTML = data;
+	document.getElementById("wybraneTekst").appendChild(liItem);
+}
+function dropObrazki(e)
+{
+	var data=e.dataTransfer.getData("Text");
+	document.getElementById("wybraneObrazki").appendChild(document.getElementById(data));
+}
+</script>
+</head>
+<body>
+<div id="auta">
+<div class="item"><img ondragstart="drag(event)" id="zygzak" src="zygzak.jpg" alt="Zygzag" /></div>
+<div class="item"><img ondragstart="drag(event)" id="sally" src="sally.jpg" alt="Sally" /></div>
+<div class="item"><img ondragstart="drag(event)" id="krol" src="krol.jpg" alt="Pan Król" /></div>
+<div class="item"><img ondragstart="drag(event)" id="szeryf" src="szeryf.jpg" alt="Szeryf" /></div>
+</div>
+<div class="wybrane" ondragover="allowDrop(event)" ondrop="dropTekst(event)">
+<ul id="wybraneTekst">
+</ul>
+</div>
+
+<div class="wybrane" id="wybraneObrazki" ondragover="allowDrop(event)" ondrop="dropObrazki(event)">
+</div>
+
+</body>
+</html>
+		

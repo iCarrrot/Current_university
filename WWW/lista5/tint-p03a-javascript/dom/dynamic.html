@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <title>Przykład pierwszy</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <meta http-equiv="Content-Language" content="pl">
+ <style type="text/css">
+   * { font-family: Verdana, Tahoma, Arial, sans-serif; font-size: small; }
+   .main { text-align: center; padding: 6px; background-color: lime; border-color: red; border-width: 2px;}
+   #zjawa { position: absolute; top: 120px; left: 540px; width: 100px; height: 100px; z-index: 3;
+            background-color: aqua; overflow: auto; visibility: hidden; }
+
+ </style>
+ <script language="JavaScript" type="text/javascript">
+   function wjazd()
+   {
+     document.getElementById("zjawa").style.visibility = "visible";
+   }
+   function wyjazd()
+   {
+     document.getElementById("zjawa").style.visibility = "hidden";
+   }
+ </script>
+</head>
+
+<body>
+<div class="main" onmouseover="javascript: wjazd();">Najedź na mnie</div>
+
+<div id="zjawa" onmouseover="javascript: wyjazd();">No to sru</div>
+
+</body>
+</html>
+

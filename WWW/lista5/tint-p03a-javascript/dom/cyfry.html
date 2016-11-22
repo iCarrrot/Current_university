@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="pl">
+<HEAD>
+ <TITLE>Menu</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <META http-equiv="Content-Language" content="pl">
+ <script language="JavaScript" type="text/javascript">
+ function laduj()
+ {
+   var ile = 8;
+   var im = new Array(ile);
+   var ims = new Array(ile);
+   for (i=0;i<ile;i++)
+   {
+     im[i] = new Image();
+     ims[i] = new Image();
+     im[i].src = "m"+i+".jpg";
+     ims[i].src = "m"+i+"s.jpg";
+   }
+ }
+ function wjazd(e)
+ {
+   var aux = e.src.slice(e.src.length-6,-4);
+   e.src = aux+"s.jpg";
+   alert(aux)
+ }
+ function wyjazd(e)
+ {
+   var aux = e.src.slice(e.src.length-7,-5);
+   e.src = aux+".jpg";
+ }
+ </script>
+</head>
+
+<body onload="javascript: laduj();">
+
+<div style="text-align: center">
+<img name="c1" src="m1.jpg" alt="Cyfra 1" border="1" onmouseover="javascript: wjazd(this);" onmouseout="javascript: wyjazd(this);" onclick="javascript: alert('Zostałem kliknięty');">
+<img name="c2" src="m2.jpg" alt="Cyfra 2" border="1" onmouseover="javascript: wjazd(this);" onmouseout="javascript: wyjazd(this);" onclick="javascript: alert('Zostałem kliknięty');">
+<img name="c3" src="m3.jpg" alt="Cyfra 3" border="1" onmouseover="javascript: wjazd(this);" onmouseout="javascript: wyjazd(this);" onclick="javascript: alert('Zostałem kliknięty');">
+<img name="c4" src="m4.jpg" alt="Cyfra 4" border="1" onmouseover="javascript: wjazd(this);" onmouseout="javascript: wyjazd(this);" onclick="javascript: alert('Zostałem kliknięty');">
+</div>
+</body>
+</html>

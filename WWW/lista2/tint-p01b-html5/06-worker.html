@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="jquery-1.8.2.min.js"></script>
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:15px; }
+</style>
+</head>
+<body>
+
+<p>Count numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button> 
+<button onclick="stopWorker()">Stop Worker</button>
+<br><br>
+
+<script>
+var w;
+var isOn = false;
+function startWorker()
+{
+if(typeof(Worker)!=="undefined")
+{
+if (!isOn)
+{
+  w=new Worker("06-counter.js");
+  w.onmessage = function (event) { document.getElementById("result").innerHTML=event.data; };
+  isOn = true;
+  }
+}
+else
+{
+document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
+}
+}
+
+function stopWorker()
+{ 
+w.terminate();
+w=null;
+document.getElementById("result").innerHTML="";
+isOn = false;
+}
+</script>
+
+</body>
+</html>
+		

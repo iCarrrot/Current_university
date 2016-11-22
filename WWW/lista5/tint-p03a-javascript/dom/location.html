@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="pl">
+<HEAD>
+ <TITLE>Location</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <META http-equiv="Content-Language" content="pl">
+ <script language="JavaScript" type="text/javascript">
+ function adres()
+ {
+   var ad = prompt("Podaj nowy adres:");
+   window.location.replace(ad);
+ }
+ function zmien()
+ {
+   window.location.href="http://www.onet.pl/";
+ }
+ </script>
+</head>
+
+<body>
+<form name="test" action="" method="get">
+<input value="Nowy adres" type="button" onclick="javascript:adres()">
+<input value="Zmień adres" type="button" onclick="javascript:zmien()">
+</form>
+
+ <script language="JavaScript" type="text/javascript">
+  document.writeln(window.location.href+"<br>");
+  document.writeln(window.location.protocol+"<br>");
+  document.writeln(window.location.host+"<br>");
+  document.writeln(window.location.hostname+"<br>");
+  document.writeln(window.location.port+"<br>");
+  document.writeln(window.location.search+"<br>");
+  document.writeln(window.location.pathname+"<br>");
+  document.writeln(window.location.hash);
+ </script>
+
+
+</body>
+</html>

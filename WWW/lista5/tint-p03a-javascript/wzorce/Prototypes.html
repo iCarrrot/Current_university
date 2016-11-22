@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; utf-8" />
+<title>Prototypes</title>
+</head>
+
+<body>
+
+<h4>Przyklad 1</h4>
+<script type="text/javascript" language="javascript">
+circle.prototype.liczba = 1;
+function circle()
+{
+    circle.prototype.liczba += 1;
+    document.write( "K: "+circle.prototype.liczba+"<br>" );
+    //alert( circle.prototype.liczba );
+}
+circle.prototype.pi=3.14159
+c1 = new circle();
+circle.prototype.opis = "Circles";
+c2 = new circle();
+
+document.write( circle.prototype.pi+"<br>" );
+document.write( c2.opis+"<br>" );
+</script>
+
+<h4>Przyklad 2</h4>
+
+<script type="text/javascript" language="javascript">
+// rozszerzenie funkcjonalnosci obiektu String
+function str_rpad( c, count )
+{
+    s = this.toString();
+	while (--count >= 0) s += c;
+	return s;
+}
+String.prototype.rpad = str_rpad;
+document.write( "n".rpad("_", 10) );
+</script>
+
+<h4>Przyk³ad 3</h4>
+
+<script language="javascript" type="text/javascript">
+<!--
+
+// The shift() and unshift() methods.
+
+if(!Array.prototype.shift) { // if this method does not exist..
+
+	Array.prototype.shift = function(){
+		firstElement = this[0];
+		this.reverse();
+		this.length = Math.max(this.length-1,0);
+		this.reverse();
+		return firstElement;
+	}
+	
+}
+
+if(!Array.prototype.unshift) { // if this method does not exist..
+	
+	Array.prototype.unshift = function(){
+		this.reverse();
+		alert(arguments.length);
+			for(var i=arguments.length-1;i>=0;i--){
+				this[this.length]=arguments[i]
+			}
+			
+		this.reverse();
+		return this.length
+	}
+}
+var x = [1,2,3];
+alert(x.shift());
+alert(x[0]);
+alert(x.unshift(5,6));
+alert(x[0]);
+//-->
+</script>
+
+</body>
+</html>

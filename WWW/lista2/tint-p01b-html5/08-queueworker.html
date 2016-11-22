@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<script src="jquery-1.8.2.min.js"></script>
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:15px; }
+</style>
+</head>
+<body>
+
+<p><button onclick="sendRequests()">Send</button></p>
+
+<ul id="log">
+</ul>
+
+<div id="errors"></div>
+<br><br>
+
+<script>
+var w;
+var isOn = false;
+function startWorker()
+{
+if(typeof(Worker)!=="undefined")
+{
+  if (!isOn)
+  {
+    w=new Worker("08-queueworker.js");
+    w.onmessage = function (event) { $("#log").append("<li>"+event.data+"</li>"); };
+	w.onerror = function(event) { document.getElementById("errors").innerHTML = event.message; };
+    isOn = true;
+  }
+}
+else
+{
+document.getElementById("errors").innerHTML="Sorry, your browser does not support Web Workers...";
+}
+}
+function sendRequests()
+{
+	for (var i=0; i<40; i++)
+		w.postMessage(parseInt(Math.random()*5)+30);
+}
+
+function stopWorker()
+{ 
+w.terminate();
+w=null;
+isOn = false;
+}
+$(function() { startWorker(); });
+</script>
+
+</body>
+</html>
+		

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="pl">
+<HEAD>
+ <TITLE>Przykład pierwszy</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <META http-equiv="Content-Language" content="pl">
+ <script language="JavaScript" type="text/javascript">
+ var w;
+ function okienko()
+ {
+   w = window.open("tekst.html","data","width=300,height=300,status=no,location=no,menubar=no,resizable=no,scrollbars=no,titlebar=no,toolbar=no");
+   w.focus();
+ }
+ function zamknij()
+ {
+   w.close();
+ }
+ function ustaw_pozycje()
+ {
+   if (w!=null) {
+     w.moveTo(50,50);
+     w.focus();
+   }
+ }
+ function przesun()
+ {
+   if (w!=null) {
+     w.moveBy(50,50);
+     w.focus();
+   }
+ }
+ function ustaw_rozmiar()
+ {
+   if (w!=null) {
+     w.resizeTo(300,300);
+     w.focus();
+   }
+ }
+ function powieksz()
+ {
+   if (w!=null) {
+     w.resizeBy(50,50);
+     w.focus();
+   }
+ }
+ function pomniejsz()
+ {
+   if (w!=null) {
+     w.resizeBy(-50,-50);
+     w.focus();
+   }
+ }
+ function przewin()
+ {
+   if (w!=null) {
+     w.scrollBy(0,100);
+     w.focus();
+   }
+ }
+ function poczatek()
+ {
+   if (w!=null) {
+     w.scrollTo(0,0);
+     w.focus();
+   }
+ }
+ function zmien_napis()
+ {
+   status = status+"x";
+ }
+ function napis()
+ {
+   timeo = setTimeout("zmien_napis()",3000);
+   alert("Heja");
+   clearTimeout(timeo);
+ }
+ function info_przegladarka()
+ {
+   var przegladarka = "Info:\n";
+   for (var wlasnosc in window.navigator)
+   {
+//     x = "self.navigator."+wlasnosc+"()";
+//     alert(eval(x));
+//     y = eval(x);
+//     przegladarka += wlasnosc+": "+x.toString()+"\n";
+     przegladarka += wlasnosc+": "+navigator[wlasnosc]+"\n";
+   }
+   alert(przegladarka);
+//   alert(eval(self.navigator.javaEnabled()));
+ }
+
+ function czyIE()
+ {
+   if (self.navigator.appName.indexOf("Microsoft") != -1) alert("IE"); else alert("nie IE");
+ }
+ function okienka_dialogowe()
+ {
+   msg = prompt("Podaj swoje imie: ","JAN");
+   alert("Twoje imie to: "+msg);
+   if (confirm("Czy chcesz dalej?"))
+   {
+     alert("Naprawdę?");
+   }
+   else
+   {
+     alert("Szkoda...");
+   }
+ }
+ </script>
+</head>
+
+<body onload="javascript: napis();">
+<form name="test" action="" method="get">
+<input value="Info" type="button" onclick="javascript:info_przegladarka()">
+<input value="Jaka przeglądarka" type="button" onclick="czyIE()">
+<input value="Okienka" type="button" onclick="javascript:okienka_dialogowe()">
+<input value="Otwórz" type="button" onclick="javascript:okienko()">
+<input value="Zamknij" type="button" onclick="javascript:zamknij()">
+<input value="Pozycja" type="button" onclick="javascript:ustaw_pozycje()">
+<input value="Przesuń" type="button" onclick="javascript:przesun()">
+<input value="Rozmiar" type="button" onclick="javascript:ustaw_rozmiar()">
+<input value="Powiększ" type="button" onclick="javascript:powieksz()">
+<input value="Pomniejsz" type="button" onclick="javascript:pomniejsz()">
+<input value="Przewiń" type="button" onclick="javascript:przewin()">
+<input value="Początek" type="button" onclick="javascript:poczatek()">
+</form>
+</body>
+</html>

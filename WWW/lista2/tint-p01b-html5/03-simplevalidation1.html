@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:2px; }
+</style>
+</head>
+<body>
+
+<form id="formm">
+<label for="name">Name:</label>
+<input type="text" id="name" name="name" placeholder="First and last name" pattern="[a-zA-Z ]{5,}" required />
+
+<label for="email">E-mail:</label>
+<input type="email" id="email" name="email" placeholder="Email please..." required />
+
+<label for="url">URL:</label>
+<input type="url" id="url" name="url" placeholder="URL please" required />
+
+<label for="tel">Phone:</label>
+<input type="tel" id="tel" name="tel" placeholder="Phone please" required />
+
+<label for="date">Date:</label>
+<input type="date" id="date" name="date" min="2010-01-01" max="2020-12-31" required />
+
+<label for="range">Range:</label>
+<input type="range" id="range" name="range" min="5" max="45" step="5" value="35" />
+
+<label for="number">Number:</label>
+<input type="number" id="number" name="number" min="5" max="45" step="5" value="35" required />
+
+<label for="number">Colours:</label>
+<input type="text" id="datalist" name="colours" list="colours" placeholder="Phone please" required />
+<datalist id="colours">
+<option value="red">
+<option value="green">
+<option value="blue">
+</datalist>
+
+<button type="submit" id="submit" name="submit" onclick="">Wyślij</button>
+</form>
+
+</body>
+</html>
+		

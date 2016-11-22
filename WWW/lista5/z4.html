@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html><head>
+<title>Zadanie 2</title>
+<meta charset="utf-8">
+
+<style >
+  #content{border: 3mm ridge yellow; }
+  #menu {border: 3mm ridge blue}
+  #sidebar{border: 3mm ridge green}
+</style>
+
+
+<script type="text/javascript">
+  function draw(color){
+      var canvas = document.getElementById('obraz');
+
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = color;
+    ctx.clearRect(0,0,100,100);
+    ctx.fillRect(0,0,100,100);
+    
+  
+
+  }
+ 
+   function modifyText1() {
+      draw("red");
+     var ul = document.getElementById("history");
+     var li =document.createElement("li");
+     li.appendChild(document.createTextNode("Czerwony"));
+     
+     ul.appendChild(li);   
+   }
+   function modifyText2() {
+     var ul = document.getElementById("history");
+     var li =document.createElement("li");
+     li.appendChild(document.createTextNode("Brązowy"));
+     draw("brown");
+     ul.appendChild(li);     
+   }
+   function modifyText3() {
+     var ul = document.getElementById("history");
+     var li =document.createElement("li");
+     li.appendChild(document.createTextNode("Czarny"));
+     draw("black");
+     ul.appendChild(li);       
+   }
+ 
+   // Funkcja dodająca obserwatora zdarzeń dla tabeli t
+   function load() { 
+     var el1 = document.getElementById("red"); 
+     var el2 = document.getElementById("brown");
+     var el3 = document.getElementById("black");
+     el1.addEventListener("click", modifyText1, true); 
+     el2.addEventListener("click", modifyText2, true); 
+     el3.addEventListener("click", modifyText3, true); 
+
+   } 
+
+</script> 
+
+
+</head>
+<body onload="load();">
+  <div id="menu">
+    <input id="red" value="Czerwony"  type="button"><br>
+    <input id="brown" value="Brązowy" type="button"><br>
+    <input id="black" value="Czarny" type="button">
+
+
+  </div>
+  <div id="content">
+  <canvas id="obraz" width="100px" height="100px">
+    fillRect()
+  </canvas>
+   
+</div>
+
+<div id="sidebar">
+  
+
+ <ul id="history">
+
+ </ul>
+
+</div>
+</body>
+
+</html>

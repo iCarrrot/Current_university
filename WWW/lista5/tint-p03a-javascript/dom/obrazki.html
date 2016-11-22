@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="pl">
+<HEAD>
+ <TITLE>Document</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <META http-equiv="Content-Language" content="pl">
+ <script language="JavaScript" type="text/javascript">
+ function zmiana()
+ {
+   im1 = new Image(100);
+   im2 = new Image();
+   im1.src = "pov.jpg";
+   im2.src = "binoche.jpg";
+
+   if (self.document.obrazek.src == im1.src)
+   {
+     self.document.obrazek.src = im2.src;
+     self.document.obrazek.width = 80;
+     self.document.obrazek.border = 0;
+   }
+   else
+     self.document.obrazek.src = im1.src;
+ }
+ </script>
+</head>
+
+<body>
+
+<img name="obrazek" src="binoche.jpg" vspace="10" border="5">
+
+<form name="test" action="" method="get">
+<input value="Zmień obrazek" type="button" onclick="javascript:zmiana()">
+</form>
+
+</body>
+</html>

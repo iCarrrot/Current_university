@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Simple Form</title>
+<script language="javascript" type="text/javascript">
+function checkForm()
+{
+var errors = false;
+// sprawdzenie poprawnosci formularza
+if (errors) document.getElementById('message').innerHTML
+= '<b>Błędy w formularzu</b>';
+else document.getElementById('message').innerHTML
+= '<b>Dane zapisane</b>';
+return false;
+}
+</script>
+</head>
+<body>
+<div id="message"></div>
+<form name="dane" action="#" onsubmit="return checkForm()">
+<table>
+<tr><td>PESEL</td>
+<td><input type="text" name="Pesel" id="Pesel" /></td></tr>
+<tr><td>E-mail</td>
+<td><input type="text" name="Email" id="Email" /></td></tr>
+<tr><td>Data urodzenia</td>
+<td><input type="text" name="Data" id="Data" /></td></tr>
+<tr><td>Miasto</td>
+<td><select name="Miasto" id="Miasto">
+<option value="0" selected="selected">---</option>
+<option value="wroclaw">Wrocław</option>
+<option value="krakow">Kraków</option>
+<option value="poznan">Warszawa</option>
+</select></td></tr>
+<tr><td>Płeć</td>
+<td><input type="radio" name="Plec" value="m" /> M
+<input type="radio" name="Plec" value="k" /> K</td></tr><tr><td colspan="2"><input type="submit" value="Zapisz" /></td></tr>
+</table>
+</form>
+</body>
+</html>

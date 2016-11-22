@@ -1,0 +1,57 @@
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+#vertical_wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+header {
+	order: 1;
+	flex: 1;
+	flex-direction: row;
+	display: flex;
+}
+
+#logo {
+	flex: 1;
+	background-color: #000080
+}
+
+#header {
+	flex: 6;
+	background-color: #98AFC7;
+}
+
+#main {
+	flex: 5;
+	order: 2;
+	display: flex;
+}
+
+nav {
+	flex: 1;
+	background-color: #6960EC;
+}
+
+section {
+	flex: 5;
+	background-color: #E5E4E2;
+}
+
+#submenu2 {
+	flex: 1;
+}
+
+footer {
+	flex: 1;
+	order: 3;
+	background-color: #6D7B8D;
+}
+
+#submenu1 {
+	display: none;
+}

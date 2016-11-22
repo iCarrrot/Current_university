@@ -1,0 +1,60 @@
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+#vertical_wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+header {
+	order: 1;
+	flex: 1;
+	flex-direction: row;
+	display: flex;
+}
+
+#logo {
+	flex: 1;
+	background-color: #000080
+}
+
+#header {
+	flex: 5;
+	background-color: #98AFC7;
+}
+
+#main {
+	flex: 6;
+	order: 3;
+	display: flex;
+}
+
+nav {
+	order: 2;
+	flex: 1;
+	background-color: #6960EC;
+}
+
+section {
+	flex: 5;
+	background-color: #E5E4E2;
+}
+
+#submenu1 {
+	flex: 1;
+	order: 0;
+}
+
+#submenu2 {
+	flex: 1;
+	order: 2;
+}
+
+footer {
+	flex: 1;
+	order: 3;
+	background-color: #6D7B8D;
+}

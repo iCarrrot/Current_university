@@ -1,0 +1,1 @@
+newtype Graph a = Tip | Node (Graph a) a (Graph a)

@@ -1,0 +1,66 @@
+﻿<!doctype html>
+<html lang="pl">
+<head>
+<title>Simple page</title>
+<script src="jquery-1.8.2.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<style>
+* { font-family: Arial, sans-serif; font-size: 10pt; }
+input { display: block; margin-bottom:2px; }
+</style>
+</head>
+<body>
+
+<form id="formularz" onsubmit="return this.checkValidity()">
+<label for="name">Name:</label>
+<input type="text" id="name" name="name" placeholder="First and last name" pattern="[a-zA-Z ]{5,}" required />
+<div id="nameRules">
+<span class="valueMissing">Wartość wymagana</span>
+<span class="patternMismatch">Co najmniej 5 znaków</span>
+</div>
+
+<label for="email">E-mail:</label>
+<input type="email" id="email" name="email" placeholder="Email please..." required />
+<div id="emailRules">
+<span class="valueMissing">Wartość wymagana</span>
+<span class="typeMismatch">Poprawny e-mail</span>
+</div>
+
+<button type="submit" id="submit" name="submit" onclick="validate()">Wyślij</button>
+</form>
+<script>
+var rules = [ 'valueMissing', 'patternMismatch', 'typeMismatch' ];
+function hideAll()
+{
+	$("#nameRules span, #emailRules span").css('display', "none");
+}
+function validate()
+{
+	hideAll();
+	document.forms[0].checkValidity();
+}
+function showErrors(e)
+{
+	var element = e.srcElement;
+	if (!element.validity.valid)
+	{
+		for (var i=0; i<rules.length; i++)
+			checkRule(element.validity,rules[i],element.id);
+		e.preventDefault();
+	}
+}
+function checkRule(validity,rule,id)
+{
+	if (eval("validity."+rule))
+		$("#"+id+"Rules ."+rule).css('display','block');
+}
+$(function() {
+    $(":input:not(:button)").each(function () {
+		this.oninvalid = showErrors;
+		this.onblur = validate;
+	});
+	hideAll();
+});
+</script>
+</body>
+</html>

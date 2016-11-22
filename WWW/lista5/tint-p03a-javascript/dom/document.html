@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML lang="pl">
+<HEAD>
+ <TITLE>Document</TITLE>
+ <META http-equiv="Content-Type" content="text/html; charset=windows-1250">
+ <META http-equiv="Content-Language" content="pl">
+ <script language="JavaScript" type="text/javascript">
+ function nowe()
+ {
+  var w = window.open("","xxx","status,width=300,height=300");
+  var d = w.document;
+  d.open();
+  d.writeln("<html>");
+  d.writeln("<head>");
+  d.writeln("<title>Nowość</title>");
+  d.writeln("</head>");
+  d.writeln("<body>");
+  d.writeln("<div align='center'>");
+  d.writeln("Jestem nowym okienkiem");
+  d.writeln("</div>");
+  d.writeln("</body>");
+  d.writeln("</html>");
+  d.close();
+  d.bgColor = "lime";
+  self.document.bgColor = "yellow";
+ }
+ </script>
+</head>
+
+<body>
+<form name="test" action="" method="get">
+<input value="Zrób okienko" type="button" onclick="javascript:nowe()">
+</form>
+
+ <script language="JavaScript" type="text/javascript">
+ </script>
+
+
+</body>
+</html>

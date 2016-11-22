@@ -1,0 +1,66 @@
+<!-- Przyk³ad ze strony: http://www.klauskomenda.com/code/javascript-programming-patterns/ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; utf-8" />
+<title>Module Pattern</title>
+<script type="text/javascript" language="javascript">
+var anchorChange3 = function () {
+
+    // private property
+    var config = {
+        colors: [ "#F63", "#CC0", "#CFF" ]   
+    }
+    
+    // this is a private method
+    // can be accessed within anchorChange3
+    // cannot be accessed from outside
+    function alterColor(linkObj, color) {
+        linkObj.style.backgroundColor = color;
+    }
+
+    return {
+        // public method
+        // can be accessed from outside
+        changeColor: function (linkObj, newColor) {
+            // calls private function to change color
+            alterColor(linkObj, newColor);
+        },
+                    
+        // public method
+        // can be accessed from outside
+        init: function () {
+            var self = this; // assign reference to current object to "self"
+        
+            // get all links on the page
+            var anchors = document.getElementsByTagName("a");
+            var size = anchors.length;
+            
+            for (var i = 0; i < size; i++) {
+                anchors[i].color = config.colors[i];
+                
+                anchors[i].onclick = function () {
+                    self.changeColor(this, this.color); // this is bound to the anchor object
+                    return false;
+                };
+            }
+        }
+    };
+}();
+</script>
+</head>
+
+<body>
+
+<ul>
+<li><a href="#">LINK 1</a></li>
+<li><a href="#">LINK 2</a></li>
+<li><a href="#">LINK 3</a></li>
+</ul>
+
+<script>
+anchorChange3.init();
+alert(anchorChange3.config.colors[1]);
+</script>
+</body>
+</html>
