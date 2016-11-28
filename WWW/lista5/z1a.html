@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8" />
+<title>Simple Form</title>
+<script language="javascript" type="text/javascript">
+function doit()
+{
+	"use strict"
+	var dict = {};
+	var i,j;
+	for(i=1;i<1000;i++)
+		{
+		for(j=1;j<1000;j++)
+			{
+			var tmp = i*j;
+			if(tmp in dict) dict[tmp]+=1;
+			else dict[tmp]=1;
+			}
+		}
+	var maxx=0;
+	var what= -1;
+	var key;
+	for(key in dict)
+		{
+		if(dict[key]>maxx)
+			{
+			maxx= dict[key];
+			what= key;
+			}
+		}
+	document.getElementById("nix").innerHTML = what;
+}
+</script>
+</head>
+
+<body>
+<div id="nix" onmouseover="javascript: doit();">najedź!</div>
+
+</body>
+</html>

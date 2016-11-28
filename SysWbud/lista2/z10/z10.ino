@@ -4,7 +4,7 @@ int led2 = 11;
 int led3 = 10;  
 int led4 = 9;  
 int led5 = 8;  
-int t[]={1,2,3,2};
+int t[]={2,1,2,8};
 
 void setup(void) {
   Serial.begin(9600);  
@@ -308,11 +308,11 @@ void loop(void) {
   cyfra(t[2],d2);
   delay(d1);
   cyfra(t[3],d2);
-int x=100;
 
-    delay(x-5*d2-4*d1);
-  time+=1;
-  time = time %(60*1000/x);
+
+    delay(250-5*d2-5*d1);
+  time+=4;
+  time = time %(60*4);
 
 }
 

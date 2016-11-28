@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; "/>
+<meta charset="UTF-8" />
+<title>Prototypes</title>
+</head>
+
+<body>
+
+<h4>Przyklad 1</h4>
+<script type="text/javascript" language="javascript">
+class Vehicle { 
+  constructor(currPos, fuel, status) {
+    this._currPosition = currPos;
+	this.fuelConsumption = fuel;
+	this.tankStatus = status;
+  }
+  get currPosition() {return this._currPosition; }
+  set currPosition(neu) {this._currPosition = neu;}
+  move(x,y)
+	{
+	this.currPosition += x;
+	this.tankStatus -= (this.fuelConsumption*y);
+	}
+  loadFuel(FuelAmount)
+	{
+	this.tankStatus += FuelAmount;
+	}
+  }
+
+class Car extends Vehicle {
+  spusc_paliwo(x) 
+	{
+	this.tankStatus -=x;
+	}
+  }
+
+class Truck extends Vehicle 
+	{
+  cofnij(x) {
+    this.currPosition -= x;
+  }
+}
+
+var car = new Car(0,5,100);
+var truck = new Truck(15,33,100);
+console.log(car.currPosition);
+car.currPosition = 10;
+console.log(car.currPosition);
+car.move(5,5);
+console.log(car.currPosition);
+console.log(car.tankStatus);
+car.spusc_paliwo(10);
+console.log(car.tankStatus);
+console.log("truck");
+console.log(truck._currPosition);
+truck.cofnij(3);
+console.log(truck._currPosition);
+truck.move(2,1);
+console.log(truck._currPosition);
+console.log(truck.tankStatus);
+
+
+
+//-->
+</script>
+
+</body>
+</html>
