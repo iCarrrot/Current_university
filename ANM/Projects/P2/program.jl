@@ -5,22 +5,51 @@ using PyPlot
 ####################################
 #punkty
 
-tablica=[(0.0,0.0)]
+zpliku=[(0.0,0.0)]
 
 ε=0.0001
 polska=[ (3.2, 6.7)  (2.7, 6.5)  (2.1, 6.4)  (1.7, 6.0)  (1.1, 5.9)  (0.7, 5.7)  (0.4, 5.7)  (0.4, 5.4)  (0.5, 5.0)  (0.3, 4.6)  (0.6, 4.3)  (0.6, 4.0)  (0.7, 3.7)  (0.6, 3.2)  (0.8, 2.9)  (0.8, 2.6)  (0.6, 2.4)  (0.8, 2.3)  (0.9, 2.4)  (1.1, 2.2)  (1.4, 2.1)  (1.8, 2.0)  (1.7, 1.8)  (1.9, 1.4)  (2.2, 1.5)  (2.1, 1.8)  (2.7, 1.6)  (2.6, 1.4)  (3.3, 1.3)  (3.5, 0.9)  (3.7, 0.6)  (3.9, 0.8)  (4.2, 0.7)  (4.3, 0.4)  (4.5, 0.5)  (4.7, 0.7)  (5.0, 0.6)  (5.5, 0.8)  (5.9, 0.6)  (6.2, 0.4)  (6.4, 0.3)  (6.3, 0.7)  (6.5, 1.2)  (6.8, 1.7)  (7.2, 2.0)  (7.1, 2.2)  (7.2, 2.4)  (6.8, 2.8)  (6.7, 3.2)  (6.8, 3.6)  (6.4, 3.9)  (6.2, 4.2)  (6.9, 4.5)  (6.8, 5.1)  (6.6, 5.6)  (6.5, 6.0)  (6.1, 6.2)  (5.5, 6.1)  (5.0, 6.2)  (4.6, 6.2)  (4.1, 6.3)  (3.7, 6.0)  (3.4, 6.1)  (3.2, 6.5)  (3.7, 6.4) (3.2, 6.7)]
 marchewka=[(4.6,0.3) (5.0,0.7) (7.0,7.0) (7.9,9.9) (8.0,10.3) (7.7,10.7) (7.0,11.5) (7.1,12.3) (7.8,13.1) (8.7,13.2) (9.8,16.3) (9.9,16.5) (9.6,16.5) (5.5+0.6,16.5) (6.1+0.6,16.7) (7.7,16.7) (8.6+0.6,17.2)  (8.4+0.6,18.3) (7.1+0.6,18.5) (6.2+0.6,17.3) (5.1+0.6,16.4) (5.8+0.6,17.4) (5.5,18.7) (4.0+0.6,17.4) (4.7+0.6,16.4) (3.6+0.6,17.3) (2.7+0.6,18.5) (1.4+0.6,18.3) (1.2+0.6,17.2) (3.3,16.7) (3.7+0.6,16.7) (4.3+0.6,16.5) (1.5,16.5) (1.1,16.5) (1.1,16.3) (2.0,11.0) (2.6,6.0) (4.2,0.7) (4.6,0.3)]
 
 #tablica=readdlm("marchewka.pkt")
-trygoIter=0.0
-while  trygoIter<=2*pi
-    trygoIter+=pi/100
-    push!(tablica, (trygoIter,sin.(trygoIter)) )
-    
+
+
+function odczytZPliku(nazwa)
+    nowaTablica=[(0.0,0.0)]
+    tablica=readdlm(nazwa)
+    n=length(tablica)-1
+    for i in 1:n+1
+        j=2
+        tx=""
+        ty=""
+        while (tablica[i][j]!=',')
+            tx=string(tx,tablica[i][j])
+            j+=1
+        end
+        j+=1
+        while (tablica[i][j]!=')')
+            ty=string(ty,tablica[i][j])
+            j+=1
+        end
+        push!(nowaTablica,(parse(Float64,tx),parse(Float64,ty)))
+    end
+    deleteat!(nowaTablica,1)
+    nowaTablica
+
+    function makeFunctionTab(nazwa)
+    if(nazwa="sinus")
+        trygoIter=0.0
+        while  trygoIter<=2*pi
+            trygoIter+=pi/100
+            push!(tablica, (trygoIter,sin.(trygoIter)) )
+            #println(trygoIter,"  ",sin.(trygoIter))
+            
+        end
+    end
 end
 
-
-
+end
+tablica=odczytZPliku("marchewka.pkt")
 
 n=length(tablica)-1
 
@@ -33,45 +62,51 @@ punkty = Array{Float64}(n+1,3)
 
 for i in 1:n+1
     (tempx,tempy)=tablica[i]
-    #=
-    j=2
-    tx=""
-    ty=""
-        while (tablica[i][j]!=',')
-            tx=string(tx,tablica[i][j])
-            j+=1
-        end
-        j+=1
-        while (tablica[i][j]!=')')
-            ty=string(ty,tablica[i][j])
-            j+=1
-        end
-    tempx=parse(Float64,tx)
-    tempy=parse(Float64,ty)
-
-    println(tx,"\n",ty,"\n\n\n")
-    =#
     punkty[i,1]=tempx
     punkty[i,2]=tempy
     push!(Testx,tempx)
     push!(Testy,tempy)
 
 end
+T_MAX=0.0
+T_MIN=0.0
+function makeT(sposob,punkty)
+    
+    if (sposob=="pitagoras")
+        punkty[1,3]=0
+        for i in 2:n+1
+            punkty[i,3]=punkty[i-1,3]+sqrt((punkty[i-1,2]- punkty[i,2])^2 + (punkty[i-1,1]-punkty[i,1])^2)
+        end
+        T_MAX=punkty[n+1,3]
+        T_MIN=punkty[1,3]
+    elseif(sposob=="równoodległe")
+        punkty[1,3]=0
+        for i in 2:n+1
+            punkty[i,3]=punkty[i-1,3]+1/(n+1)
+        end
+        T_MAX=punkty[n+1,3]
+        T_MIN=punkty[1,3]
+    elseif(sposob=="czebyszew")
+        
+        for i in 1:n+1
+            punkty[i,3]=-cos.((2*i-1)/(2*n+1) * pi)
+        end
+        T_MAX=punkty[n+1,3]
+        T_MIN=punkty[1,3]
+    end
+    (T_MAX,T_MIN)
+    println(punkty)
 
-punkty[1,3]=0
-
-for i in 2:n+1
-    punkty[i,3]=punkty[i-1,3]+sqrt((punkty[i-1,2]- punkty[i,2])^2 + (punkty[i-1,1]-punkty[i,1])^2)
 end
-T_MAX=punkty[n+1,3]
+
 
 
 
 ###################
 #okresowa sklejana
 
-Y_t=Array{Float64}(n+2,2)#[t,y(t)]
-X_t=Array{Float64}(n+2,2)#[t,x(t)]
+Y_t=Array{Float64}(n+3,2)#[t,y(t)]
+X_t=Array{Float64}(n+3,2)#[t,x(t)]
 p=Array{Float64}(n)
 q=Array{Float64}(n)
 u_y=Array{Float64}(n)
@@ -91,11 +126,16 @@ for i in 1:n+1
     X_t[i,1]=punkty[i,3]
     X_t[i,2]=punkty[i,1]
 end
-Y_t[n+2,2]=Y_t[2,2]
-X_t[n+2,2]=X_t[2,2]
+Y_t[n+2,2]=Y_t[1,2]
+X_t[n+2,2]=X_t[1,2]
+Y_t[n+3,2]=Y_t[2,2]
+X_t[n+3,2]=X_t[2,2]
+Y_t[n+2,1]=Y_t[1,1]+T_MAX
+X_t[n+2,1]=X_t[1,1]+T_MAX
+Y_t[n+3,1]=Y_t[2,1]+T_MAX
+X_t[n+3,1]=X_t[2,1]+T_MAX
 
-
-h_t(k)=if(k==n+2) Y_t[2,1]-Y_t[1,1] elseif (k==n+3 )   Y_t[2,2]-Y_t[1,2] else Y_t[k,1]-Y_t[k-1,1] end 
+h_t(k)=if(k==n+2) Y_t[2,1]-Y_t[1,1] elseif (k==n+3 )   Y_t[3,1]-Y_t[2,1] else Y_t[k,1]-Y_t[k-1,1] end 
 
 λ(k)=h_t(k)/(h_t(k)+h_t(k+1))
 
@@ -141,11 +181,12 @@ end
 
 function š_y(x)
     k=0
-    for i in 2:n+2
+    for i in 2:n+1
         if (x>=Y_t[i-1,1] && x<=Y_t[i,1])
             k=i
         end
     end
+    #println("t: ",x," t_i-1: ",Y_t[k-1,1]," t_i: ",Y_t[k,1]," k: ",k)
     1/h_t(k)*   (1/6*M_y[k-1]*(Y_t[k,1]-x)^3+
                  1/6*M_y[k]*(x-Y_t[k-1,1])^3+
                 (Y_t[k-1,2]-1/6*M_y[k-1]*h_t(k)^2)*(Y_t[k,1]-x)+
@@ -155,11 +196,14 @@ end
 
 function š_x(x)
     k=0
-    for i in 2:n+2
+    for i in 2:n+1
         if (x>=X_t[i-1,1] && x<=X_t[i,1])
             k=i
+           println("to jest k: ",k," ",x," ",X_t[k,1])
         end
+
     end
+    println("to jest 2k: ",k," ",x," ")
     1/h_t(k)*   (1/6*M_x[k-1]*(X_t[k,1]-x)^3+
                  1/6*M_x[k]*(x-X_t[k-1,1])^3+
                 (X_t[k-1,2]-1/6*M_x[k-1]*h_t(k)^2)*(X_t[k,1]-x)+
@@ -169,46 +213,44 @@ end
 
 #######################################################
 
-Num_y=copy(Y_t)
-Num_x=copy(X_t)
+    Num_y=copy(Y_t)
+    Num_x=copy(X_t)
 
 
 
-function wsp(Num)
-    k=1
-    for i in 2:n+1
-        for j in n+1:-1:i
-            Num[j,2]=(Num[j-1,2]-Num[j,2])/(Num[j-k,1]-Num[j,1])    
-        end
-        k+=1 
-    end
-end
-wsp(Num_y)
-wsp(Num_x)
-function poly(Num,x)
-    val=0.0
-    z=1.0
-    val=Num[1,2]
-    for i in 2:n+1
-        z=Num[i,2]
-        if(z!=0)
-            for j in 1:i-1
-                z*=(x-Num[j,1])
+    function wsp(Num)
+        k=1
+        for i in 2:n+1
+            for j in n+1:-1:i
+                Num[j,2]=(Num[j-1,2]-Num[j,2])/(Num[j-k,1]-Num[j,1])    
             end
+            k+=1 
         end
-        val+=z
     end
-    val
-end
-
-
+    wsp(Num_y)
+    wsp(Num_x)
+    function poly(Num,x)
+        val=0.0
+        z=1.0
+        val=Num[1,2]
+        for i in 2:n+1
+            z=Num[i,2]
+            if(z!=0)
+                for j in 1:i-1
+                    z*=(x-Num[j,1])
+                end
+            end
+            val+=z
+        end
+        val
+    end
 
 #######################################################
 #rysowanie
 
+#=
 
-
-temp_t=0
+temp_t=T_MIN
 X=Float64[]
 Y=Float64[]
 X1=Float64[]
@@ -225,7 +267,7 @@ push!(X,š_x(0))
 push!(Y,š_y(0))
 =#
 #println("192")
-while temp_t<=T_MAX
+while temp_t<=Y_t[n,1]
     #push!(X,poly(Num_x,temp_t))
    # push!(Y,poly(Num_y,temp_t))
     push!(X1,š_x(temp_t))
@@ -268,3 +310,4 @@ for i in 1:n
 end
 =#
 axis("equal")
+=#
