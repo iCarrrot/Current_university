@@ -1,0 +1,26 @@
+<HTML>
+ <BODY>
+ <H2>Witamy na naszym przykładowym portalu<H2>
+ <!--ESI
+ <H3>Prognoza pogody:</H3>
+ <ESI:INCLUDE SRC="/weather.jsp?sessID=$(QUERY_STRING{sessID})" />
+ <H3>Najnowsze wiadomości:</H3>
+ <ESI:INCLUDE SRC="/news.jsp?sessID=$(QUERY_STRING{sessID})" />
+ <ESI:TRY>
+ <ESI:ATTEMPT>
+ <H3>Informacje giełdowe:</H3>
+ <ESI:INCLUDE SRC="/stocks.jsp?sessID=$(QUERY_STRING{sessID})" />
+ </ESI:ATTEMPT>
+ <ESI:EXCEPT>
+ Informacje giełdowe są chwilowo niedostępne. Przepraszamy.
+ </ESI:EXCEPT>
+ </ESI:TRY>
+ <ESI:CHOOSE>
+ <ESI:WHEN TEST="$(QUERY_STRING{type}) == 'Sport'">
+ Informacje sportowe:
+ <ESI:INCLUDE SRC="/sport.jsp?sessID=$(QUERY_STRING{sessID})" />
+ </ESI:WHEN>
+ </ESI:CHOOSE>
+ -->
+ </BODY>
+ </HTML>

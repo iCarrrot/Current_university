@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+
+  "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="pl">
+
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+  <title>Zgłoszenie</title>
+
+</head>
+
+<body>
+
+<?php
+
+  if (isset($_POST["submit"])) {
+
+  // Zostaliśmy przekierowani na stronę z formularza
+
+  // - sprawdzamy, czy wszystkie pola zostały wypełnione
+
+    if (empty($_POST["imie"]) ||
+
+        empty($_POST["nazwisko"]) ||
+
+        empty($_POST["zawod"]) || empty($_POST["email"])) {
+
+      echo "<p style="color:red">Musisz wypełnić wszystkie pola!</p>";
+
+      echo "<p><a href=z4.html>Powrót do formularza</a></p>";
+
+    } else {
+
+      ?>
+
+      <h3>Dziękujemy za zgłoszenie!</h3>
+
+      <p>Twoje dane:</p>
+
+      <ul>
+
+      <li>Imię: <b><?= trim($_POST["imie"]); ?></b></li>
+
+      <li>Nazwisko: <b><?= trim($_POST["nazwisko"]); ?></b></li>
+
+      <li>Zawód: <b><?= trim($_POST["zawod"]); ?></b></li>
+
+      <li>Adres email: <b><?= trim($_POST["email"]); ?></b></li>
+
+      <?php
+
+      if (isset($_POST["mailing"]))
+
+        echo "<li>Chcesz otrzymywać informacje handlowe.</li>";
+
+      else
+
+        echo "<li>Nie chcesz otrzymywać informacji handlowych.</li>";
+
+      ?>
+
+      </ul>
+
+      <?php
+
+    }
+
+  } else {
+
+    // Jeśli użytkownik dostał się na tę stronę w sposób inny niż przez formularz
+
+    // zostaje przekierowany do formularza zgłoszenia
+
+    header("Location: formularz.php");
+
+  }
+
+?>
+
+</body>
+
+</html>

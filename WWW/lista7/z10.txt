@@ -1,0 +1,7 @@
+ 
+__utma – przechowuje unikalny identyfikator odwiedzającego,ciastko ważne 2 lata od utworzenia/aktualizacji,
+__utmb – służy do przechowywania informacji o sesji, ciastko ważne przez 30 minut od ostatniej aktywności,
+__utmc – służy do przechowywania informacji o sesji z tą różnicą, że jest ważne do momentu zamknięcia przeglądarki,
+__utmz – służy do przechowywania informacji na temat, z jakiego źródła na stronę trafił użytkownik, ciastko ważne przez 6 miesięcy od utworzenia/aktualizacji,
+__utmv.– w przypadku wykorzystania zmiennych niestandardowych umożliwia przechowywanie niestandardowych informacji na temat użytkownika, ciastko jest ważne przez 2 lata od utworzenia/aktualizacji.
+Jest też ciasteczko __utmx tworzone z myślą o eksperymentach (dawniej realizowanych przez Google Website Optimizer) ważne przez 2 lata.
