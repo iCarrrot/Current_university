@@ -1,3 +1,5 @@
+#Michał Martusewicz 282023 - zadanie P.2.12
+
 x=linspace(0,2,200)
 y=0*x
 plot(x,y)

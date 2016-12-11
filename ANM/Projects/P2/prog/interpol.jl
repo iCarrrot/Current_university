@@ -1,5 +1,34 @@
+#Michał Martusewicz 282023 - zadanie P.2.12
 using PyPlot
 setprecision(700)
+
+function mathFunction(nazwa)
+    tablica=[(0.0,0.0)]
+    if(nazwa=="sinus")
+        trygoIter=BigFloat(0)
+        while  trygoIter<=2*pi
+            trygoIter+=pi/100
+            push!(tablica, (trygoIter,sin.(trygoIter)) )
+            #println(trygoIter,"  ",sin.(trygoIter))
+            
+        end
+        
+        return tablica
+    end
+    if(nazwa=="okrąg")
+        trygoIter=BigFloat(0)
+        while  trygoIter<=2*pi
+            trygoIter+=pi/100
+            push!(tablica, (cos.(trygoIter),sin.(trygoIter)) )
+            #println(trygoIter,"  ",sin.(trygoIter))
+            
+        end
+        deleteat!(tablica, 1)
+        return tablica
+    end
+end
+
+
 function odczytZPliku(nazwa)
     nowaTablica=[(0.0,0.0)]
     tablica=readdlm(nazwa)
@@ -41,7 +70,7 @@ function makeT(sposob,punkty)
     elseif(sposob=="czebyszew")
         
         for i in 1:n+1
-            punkty[i,3]=-cos.((2*i-1)/(2*n+1) * pi)
+            punkty[i,3]=-cos.(BigFloat((2*i-1)/(2*n+1) )* pi)
         end
         
     end
@@ -50,8 +79,19 @@ function makeT(sposob,punkty)
     (T_MAX,T_MIN)
 
 end
-function interpol(ε,nazwa,sposob,typ)
-    tablica=odczytZPliku(nazwa)
+####################################################################
+#
+#
+#Funkcja właściwa
+#
+#
+####################################################################
+function interpol(ε,czyZpliku,nazwa,sposob,typ)
+    if(czyZpliku==1)
+        tablica=odczytZPliku(nazwa)
+    else
+        tablica=mathFunction(nazwa)
+    end
     n=length(tablica)-1
     punkty = Array{Float64}(n+1,3)
     Y_t=Array{Float64}(n+3,2)#[t,y(t)]
@@ -86,7 +126,7 @@ function interpol(ε,nazwa,sposob,typ)
     X=Float64[]
     Y=Float64[]
     
-    if(typ=="sklejana")
+    if(typ=="okresowa")
         p=Array{Float64}(n)
         q=Array{Float64}(n)
         u_y=Array{Float64}(n)
@@ -95,11 +135,8 @@ function interpol(ε,nazwa,sposob,typ)
         t=Array{Float64}(n+1)
         v_y=Array{Float64}(n+1)
         v_x=Array{Float64}(n+1)
-        M_y=Array{Float64}(n+1)
-        M_x=Array{Float64}(n+1)
-
-
-        
+        M_y=Array{Float64}(n+2)
+        M_x=Array{Float64}(n+2)
 
         h_t(k)=if(k==n+2) Y_t[2,1]-Y_t[1,1] elseif (k==n+3 )   Y_t[3,1]-Y_t[2,1] else Y_t[k,1]-Y_t[k-1,1] end 
 
@@ -141,6 +178,10 @@ function interpol(ε,nazwa,sposob,typ)
             M_y[k]=v_y[k]+t[k]*M_y[n]
             M_x[k]=v_x[k]+t[k]*M_x[n]
         end
+        M_y[1]=M_y[n+1]
+        M_y[n+2]=M_y[2]
+        M_x[1]=M_x[n+1]
+        M_x[n+2]=M_x[2]
 
         function š_y(x)
             k=0
@@ -195,38 +236,117 @@ function interpol(ε,nazwa,sposob,typ)
         ε=BigFloat(ε)
 
         function wsp(Num)
-            k=1
-            for i in 2:n+1
-                for j in n+1:-1:i
-                    Num[j,2]=(Num[j-1,2]-Num[j,2])/(Num[j-k,1]-Num[j,1])    
+            for  j = 1:n
+                for k = n : -1 : j 
+                    Num[k+1,2] = (Num[k+1,2]- Num[k,2])/(Num[k+1,1]- Num[k-j+1,1])
                 end
-                k+=1 
             end
         end
         wsp(Num_y)
         wsp(Num_x)
         function poly(Num,x)
-            val=BigFloat(0)
-            z=BigFloat(1)
-            val=Num[1,2]
-            for i in 2:n+1
-                z=Num[i,2]
-                if(z!=0)
-                    for j in 1:i-1
-                        z*=(x-Num[j,1])
-                    end
-                end
-                val+=z
+            
+            temp = BigFloat(1)
+            res = Num[1,2]
+            for i=1:n 
+                temp *= (x - Num[i,1])
+                 res += Num[i+1,2] *temp
             end
-            val
+            return res 
         end
         temp_t=BigFloat(temp_t)
         while temp_t<=T_MAX
             push!(X,Float64(poly(Num_x,temp_t)))
             push!(Y,Float64(poly(Num_y,temp_t)))
-            temp_t+=ε/10
+            temp_t+=ε
         end
         return(X,Y)
+
+    elseif(typ=="naturalna")
+        pn=Array{Float64}(n)
+        qn=Array{Float64}(n)
+        un_y=Array{Float64}(n)
+        un_x=Array{Float64}(n)
+        s=Array{Float64}(n)
+        t=Array{Float64}(n+1)
+        v_y=Array{Float64}(n+1)
+        v_x=Array{Float64}(n+1)
+        M_y=Array{Float64}(n+2)
+        M_x=Array{Float64}(n+2)
+
+        hn_t(k)=if(k==n+2) Y_t[2,1]-Y_t[1,1] elseif (k==n+3 )   Y_t[3,1]-Y_t[2,1] else Y_t[k,1]-Y_t[k-1,1] end 
+
+        λn(k)=hn_t(k)/(hn_t(k)+hn_t(k+1))
+
+
+
+        dn_y(k)=6./(hn_t(k)+hn_t(k+1)) *((Y_t[k+1,2]-Y_t[k,2])/hn_t(k+1)-(Y_t[k,2]-Y_t[k-1,2])/hn_t(k) )
+        dn_x(k)=6/(hn_t(k)+hn_t(k+1)) *((X_t[k+1,2]-X_t[k,2])/hn_t(k+1)-(X_t[k,2]-X_t[k-1,2])/hn_t(k) )
+
+
+        qn[1]=un_y[1]=un_x[1]=0
+       
+
+        for k in 2:n
+            λn_k= λn(k)
+            pn[k]=λn_k*qn[k-1]+2.0
+            qn[k]=(λn_k-1.0)/pn[k]
+            un_y[k]=(dn_y(k)-λn_k*un_y[k-1])/pn[k]
+            un_x[k]=(dn_x(k)-λn_k*un_x[k-1])/pn[k]
+        end
+
+
+        M_y[n]=un_y[n]
+        M_x[n]=un_x[n]
+
+        for k in n-1:-1:2
+            M_y[k]=un_y[k]+qn[k]*M_y[k+1]
+            M_x[k]=un_x[k]+qn[k]*M_x[k+1]
+        end
+        M_y[1]=M_y[n+1]=0
+        
+        M_x[1]=M_x[n+1]=0
+        
+
+        function s_y(x)
+            k=0
+            for i in 2:n+1
+                if (x>=Y_t[i-1,1] && x<=Y_t[i,1])
+                    k=i
+                end
+            end
+            #println("t: ",x," t_i-1: ",Y_t[k-1,1]," t_i: ",Y_t[k,1]," k: ",k)
+            1/hn_t(k)*   (1/6*M_y[k-1]*(Y_t[k,1]-x)^3+
+                         1/6*M_y[k]*(x-Y_t[k-1,1])^3+
+                        (Y_t[k-1,2]-1/6*M_y[k-1]*hn_t(k)^2)*(Y_t[k,1]-x)+
+                        (Y_t[k,2]  -1/6*M_y[k]  *hn_t(k)^2)*(x-Y_t[k-1,1])
+                        )
+        end
+
+        function s_x(x)
+            k=0
+            for i in 2:n+1
+                if (x>=X_t[i-1,1] && x<=X_t[i,1])
+                    k=i
+                   #println("to jest k: ",k," ",x," ",X_t[k,1])
+                end
+
+            end
+            #println("to jest 2k: ",k," ",x," ")
+            1/hn_t(k)*   (1/6*M_x[k-1]*(X_t[k,1]-x)^3+
+                         1/6*M_x[k]*(x-X_t[k-1,1])^3+
+                        (X_t[k-1,2]-1/6*M_x[k-1]*hn_t(k)^2)*(X_t[k,1]-x)+
+                        (X_t[k,2]  -1/6*M_x[k]  *hn_t(k)^2)*(x-X_t[k-1,1])
+                        )
+        end
+
+        
+        while temp_t<=T_MAX
+            push!(X,s_x(temp_t))
+            push!(Y,s_y(temp_t))
+            temp_t+=ε
+        end
+        return (X,Y)
 
     end
 
