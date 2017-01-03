@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <limits.h>
-#include <stdio.h> 
 #include <time.h>
 
 int licz(unsigned int tablica[], int size ){
@@ -10,11 +9,6 @@ int licz(unsigned int tablica[], int size ){
 		unsigned int x= ~(tablica[i]);
 		if((x!=0 )&&( (x&(x-1))!=0)){
 			count++;
-			//printf("%u\n", x);
-			//printf("%u  %u  %u %u   %u\n", x,x!=0,x&(x-1), (x&(x-1)) !=0, x!=0 && x&(x-1)!=0);
-		}
-		else{
-			//printf("%u  %u  %u %u   %u\n", x,x!=0,x&(x-1), (x&(x-1)) !=0, x!=0 && x&(x-1)!=0);
 		}
 	}
 	return  count;
@@ -32,18 +26,13 @@ int licz2(unsigned int tablica[], int size ){
 
 
 		int temp=0;
-		for (int j=0; j<32; j++){
-			
-			temp+=((x>>j)&0x00000001);
-			//printf("%u  %u\n", temp,((x>>j)&0x00000001));
-
+		for (int j=0; j<32; j++){	
+			temp+=((x>>j)&1);
 		}
 		if(temp>=2){
 			count++;
-			//printf("%u\n",~tablica[i] );
 		}
 	}
-	//printf("%u\n", count);
 	return  count;
 }
 
@@ -62,18 +51,14 @@ int main(){
 		//printf("%u\n", tablica[i]);
 
 	}
+	clock_t start1 = clock();
 	int ile=licz(tablica,size);
+	clock_t end1 = clock();
+
+	clock_t start2 = clock();
 	int ile2=licz2(tablica,size);
-
-	while(ile-ile2==0&&ile-size==0){
-		for(int i=0;i<size;i++){
-			tablica[i]= rand();
-		}
-		ile=licz(tablica,size);
-		ile2=licz2(tablica,size);
-
-		
-	}
-	printf("%u %u %u\n", ile, ile2,size);
+	clock_t end2 = clock();
+	printf("czas 1: %li, czas 2: %li\n", (long) (end1-start1),(long)(end2-start2));
+	
 	return 0;
 }

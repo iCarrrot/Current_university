@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <limits.h>
-#include <stdio.h>  
+#include <time.h>  
 
 void spaceFunction(char napis[], int size){
 	for (int i=0;i<size;i++){
@@ -47,11 +47,18 @@ void spaceFunction2(char napis[], int size){
 
 
 int main(){
-	char napis[8]={' ','a',' ',' ','a','b',' ','e'};
-	spaceFunction2(napis,8);
-	for (int i=0;i<8;i++){
-		printf("%c", napis[i]);
-	}
+	
+	char napis[71]={' ','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e','a',' ',' ','a','b',' ','e'};
+	clock_t start = clock();
+	spaceFunction(napis,71);
+	clock_t end = clock();
+
+	clock_t start2 = clock();
+	spaceFunction2(napis,71);
+	clock_t end2 = clock();
+	
+	printf("czas 1: %li, czas 2: %li\n", (long) (end-start),(long)(end2-start2));
+	
 
 	return 0;
 }

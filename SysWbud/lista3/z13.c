@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <limits.h>
-#include <stdio.h>  
-#include <windows.h>  
+#include <time.h>  
+
 
 unsigned int reverse1(register unsigned int x)
 {
@@ -64,20 +64,39 @@ unsigned int reverse3(unsigned int v){
 
 
 int main(){
-    double start1 = omp_get_wtime();
-    unsigned int x1=reverse1(104444); 
-    double end1 = omp_get_wtime();
-    printf("reverse1: %d  %d\n", end1-start1,x1);
+    int i;
+    clock_t start1 = clock();
+    unsigned int x1=reverse1(1041444);
+    i=0;
+    while(i<1000000){
+        x1+=reverse1(i);
+        i++;
+    } 
+    clock_t end1 = clock();
+    printf("reverse1: %li\n",(long) (end1-start1));
 
-    double start2 = omp_get_wtime();
-    unsigned int x2=reverse2(104444); 
-    double end2 = omp_get_wtime();
-    printf("reverse2: %d  %d\n", end2-start2,x2);
+    
+    clock_t start2 = clock();
+    
+    unsigned int x2=reverse2(1041444);
+    i=0;
+    while(i<1000000){
+        x2+=reverse2(i);
+        i++;
+    } 
+    clock_t end2 = clock();
+    printf("reverse2: %li\n", (long)(end2-start2));
 
-    double start3 = omp_get_wtime();
-    unsigned int x3=reverse3(104444); 
-    double end3 = omp_get_wtime();
-    printf("reverse3: %d  %d\n", end3-start3,x3);
+    clock_t start3 = clock();
+
+    unsigned int x3=reverse3(1041444);
+    i=0;
+    while(i<1000000){
+        x3+=reverse3(i);
+        i++;
+    } 
+    clock_t end3 = clock();
+    printf("reverse3: %li\n",(long) (end3-start3));
 
 
     
