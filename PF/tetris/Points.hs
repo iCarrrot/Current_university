@@ -12,14 +12,30 @@ block:: Char->(GLfloat,GLfloat)->GLfloat->GLfloat->[(GLfloat,GLfloat,GLfloat,GLf
 block typ (x,y) size rotate
     |typ=='I' =
         if (moduloGLFloat rotate 2) == 0 
-            then  [(x,y,0,1,0,0),(x,y-size,0,1,0,0),(x,y-size-size,0,1,0,0),(x,y-size-size-size,0,1,0,0)] 
-            else  let x'=y in let y'=x in  [(x',y',0,1,0,0),(x',y'-size,0,1,0,0),(x',y'-size-size,0,1,0,0),(x',y'-size-size-size,0,1,0,0)] 
-    |typ=='T' = [(x,y,0,0.5,0.5,0.5),(x-size,y,0,0.5,0.5,0.5),(x+size,y,0,0.5,0.5,0.5),(x,y-size,0,0.5,0.5,0.5)] 
+            then  [(x,y,0,1,0,0),(x,y+size,0,1,0,0),(x,y+size+size,0,1,0,0),(x,y+size+size+size,0,1,0,0)] 
+            else  [(x,y,0,1,0,0),(x-size,y,0,1,0,0),(x+size,y,0,1,0,0),(x-size-size,y,0,1,0,0)] 
+    |typ=='T' = case rotate of 
+        1 -> [(x,y,0,0.5,0.5,0.5),(x-size,y+size,0,0.5,0.5,0.5),(x+size,y+size,0,0.5,0.5,0.5),(x,y+size,0,0.5,0.5,0.5)] 
+        2 -> [(x,y,0,0.5,0.5,0.5),(x-size,y+size,0,0.5,0.5,0.5),(x,y+size,0,0.5,0.5,0.5),(x,y+size+size,0,0.5,0.5,0.5)] 
+        3 -> [(x,y,0,0.5,0.5,0.5),(x-size,y,0,0.5,0.5,0.5),(x+size,y,0,0.5,0.5,0.5),(x,y+size,0,0.5,0.5,0.5)] 
+        otherwise -> [(x,y,0,0.5,0.5,0.5),(x+size,y+size,0,0.5,0.5,0.5),(x,y+size,0,0.5,0.5,0.5),(x,y+size+size,0,0.5,0.5,0.5)]    
     |typ=='O' = [(x,y,0,0,1,1),(x+size,y,0,0,1,1),(x,y-size,0,0,1,1),(x+size,y-size,0,0,1,1)] 
-    |typ=='L' = [(x,y,0,1,1,0),(x,y-size,0,1,1,0),(x,y-size-size,0,1,1,0),(x+size,y-size-size,0,1,1,0)]
-    |typ=='J' = [(x,y,0,1,0,1),(x,y-size,0,1,0,1),(x,y-size-size,0,1,0,1),(x-size,y-size-size,0,1,0,1)]
-    |typ=='S' = [(x,y,0,0,0,1),(x+size,y,0,0,0,1),(x,y-size,0,0,0,1),(x-size,y-size,0,0,0,1)] 
-    |typ=='Z' = [(x,y,0,0,1,0),(x-size,y,0,0,1,0),(x,y-size,0,0,1,0),(x+size,y-size,0,0,1,0)]
+    |typ=='L' = case rotate of 
+        1 -> [(x,y,0,1,1,0),(x,y+size,0,1,1,0),(x,y+size+size,0,1,1,0),(x+size,y,0,1,1,0)]
+        2 ->[(x-size,y,0,1,1,0),(x-size,y+size,0,1,1,0),(x,y+size,0,1,1,0),(x+size,y+size,0,1,1,0)]
+        3 -> [(x,y,0,1,1,0),(x,y+size,0,1,1,0),(x,y+size+size,0,1,1,0),(x-size,y+size+size,0,1,1,0)]
+        otherwise -> [(x+size,y +size ,0,1,1,0),(x-size,y,0,1,1,0),(x,y,0,1,1,0),(x+size,y,0,1,1,0)]
+    |typ=='J' = case rotate of 
+        1 -> [(x,y,0,1,0,1),(x,y+size,0,1,0,1),(x,y+size+size,0,1,0,1),(x-size,y,0,1,0,1)]
+        2 ->[(x,y,0,1,0,1),(x-size,y+size,0,1,0,1),(x+size,y,0,1,0,1),(x-size,y,0,1,0,1)]
+        3 ->[(x,y,0,1,0,1),(x,y+size,0,1,0,1),(x,y+size+size,0,1,0,1),(x+size,y+size+size,0,1,0,1)]
+        otherwise -> [(x+size,y,0,1,0,1),(x+size,y+size,0,1,0,1),(x,y+size,0,1,0,1),(x-size,y+size,0,1,0,1)]
+    |typ=='S' = case (moduloGLFloat rotate 2) of 
+        1 -> [(x,y,0,0,0,1),(x-size,y,0,0,0,1),(x,y+size,0,0,0,1),(x+size,y+size,0,0,0,1)]
+        otherwise -> [(x,y,0,0,0,1),(x-size,y+size,0,0,0,1),(x,y+size,0,0,0,1),(x-size,y+size+size,0,0,0,1)]
+    |typ=='Z' = case (moduloGLFloat rotate 2) of 
+        1 -> [(x,y,0,0,1,0),(x+size,y,0,0,1,0),(x,y+size,0,0,1,0),(x-size,y+size,0,0,1,0)]
+        otherwise -> [(x,y,0,0,1,0),(x+size,y+size,0,0,1,0),(x,y+size,0,0,1,0),(x+size,y+size+size,0,0,1,0)]
     |otherwise = [(x,y,0,1,1,1),(x-size,y,0,1,1,1),(x,y-size,0,1,1,1),(x+size,y-size,0,1,1,1),(x+size+size,y-size,0,1,1,1)]
 
 

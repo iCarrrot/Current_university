@@ -13,7 +13,7 @@ keyboardMouse :: IORef GLfloat -> IORef (GLfloat, GLfloat) ->KeyboardMouseCallba
 keyboardMouse a p key Down _ _ = case key of
   (SpecialKey KeyLeft ) -> p $~! \(x,y) -> if x>(-1) then (x-0.1,y) else (-1,y)
   (SpecialKey KeyRight) -> p $~! \(x,y) -> if x<1 then(x+0.1,y) else (1,y)
-  (SpecialKey KeyUp   ) -> a $~! \x-> moduloGLFloat x+1 4
+  (SpecialKey KeyUp   ) -> a $~! \x-> (moduloGLFloat (x+1) 4)
   (SpecialKey KeyDown ) -> p $~! \(x,y) -> if y>(-1) then(x,y-0.1) else (x,-1)
   _ -> return ()
 keyboardMouse _ _ _ _ _ _ = return ()

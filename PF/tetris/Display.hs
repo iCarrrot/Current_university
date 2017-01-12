@@ -35,17 +35,29 @@ display angle pos table ran= do
 
   swapBuffers
  
-idle :: IORef (GLfloat,GLfloat) ->IORef GLfloat -> IORef GLfloat -> IdleCallback
-idle p delta timer = do
-  d <- get delta
+idle :: IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat -> IdleCallback
+idle p size speed timer newBlock num = do
+  sp <- get speed
+  si <- get size
   t <- get timer
+  p'<-get p
   
-  timer $~! (+ 1)
+  timer $~! \x-> moduloGLFloat (t+1) sp
+  
+  newBlock $~! \x -> let (_,y')=p' in 
+  	if y'>=(-1) then 0 else 1
 
-  p $~! \(x,y) -> if y>(-1 )  then 
-  		if moduloGLFloat t 10 == fromIntegral(0)  then (x,y- 100 * d) 
+  nb<- get newBlock
+  p $~! \(x,y) ->
+  		if moduloGLFloat t sp == fromIntegral(0)  then 
+  			if nb <1 then (x,y-si) else (0,0.8)
   		else (x,y) 
-  	else (x,-1) 
+
+  ran <-randomIO :: IO GLfloat
+  
+
+  num $~! \x -> 
+  	if nb <1 then x else ran
   postRedisplay Nothing
 
 unzipper :: [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->[(GLfloat,GLfloat,GLfloat, GLfloat,GLfloat,GLfloat)]
