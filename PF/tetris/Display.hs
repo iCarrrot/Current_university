@@ -34,9 +34,9 @@ display angle pos table ran= do
 
   swapBuffers
  
-idle :: IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat-> IORef GLfloat-> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IdleCallback
+idle ::IORef GLfloat-> IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat-> IORef GLfloat-> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IdleCallback
 
-idle p size speed timer newBlock num angle table= do
+idle pause' p size speed timer newBlock num angle table= do
   sp <- get speed
   si <- get size
   t <- get timer
@@ -56,9 +56,9 @@ idle p size speed timer newBlock num angle table= do
   table $~! \x -> if nb==1 then 
     updater tb num' p'  angle' 
     else x
-  
+  pause <- get pause'
   p $~! \(x,y) ->
-      if (moduloGLFloat t sp == fromIntegral(0) )||nb==1 then 
+      if (moduloGLFloat t sp == fromIntegral(0) &&( pause <1) )||( nb==1  )then 
         if nb <1 then (x,y-si*2) else (0.5-0.55,2-1.05)
       else (x,y) 
 

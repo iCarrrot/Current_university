@@ -10,13 +10,14 @@ reshape :: ReshapeCallback
 reshape size = do 
   viewport $= (Position 0 0, size)
  
-keyboardMouse :: IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat)  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] ->IORef GLfloat->KeyboardMouseCallback
-keyboardMouse ran a p tab s key Down _ _ = do 
+keyboardMouse :: IORef GLfloat ->IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat)  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] ->IORef GLfloat->KeyboardMouseCallback
+keyboardMouse pause ran a p tab s key Down _ _ = do 
     angle <- get a
     num <- get ran
     pos <- get p
     table <- get tab
     size' <- get s
+    pause' <- get pause
     let (left,right)=blockSize num angle in 
         let size = 2*size' in
         let (left',right')=blockSize num (moduloGLFloat (angle+1) 4) in 
@@ -51,6 +52,10 @@ keyboardMouse ran a p tab s key Down _ _ = do
               (SpecialKey KeyDown ) -> do
                                       p $~! \(x,y) -> if y>(-0.95+size) then(x,y-size) else (x,-0.95)
                                      -- print (blok)
+              (Char 'c') -> tab $~! \x -> makeTable (fromIntegral 10) (fromIntegral 20)
+              (Char 'p') -> do
+                            print pause'
+                            pause $~! \x-> if pause' <1 then 1 else 0 
               _ -> return ()
-keyboardMouse _ _ _ _ _ _ _ _ _ = return ()
+keyboardMouse _ _ _ _ _ _ _ _ _ _ = return ()
 

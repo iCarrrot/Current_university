@@ -13,6 +13,7 @@ main = do
   initialDisplayMode $= [DoubleBuffered]
   _window <- createWindow "iTetris v.0.5"
   reshapeCallback $= Just reshape
+  pause <- newIORef 0.0
   angle <- newIORef 1
   size <- newIORef 0.05
   speed <- newIORef 20
@@ -24,8 +25,8 @@ main = do
   num <- newIORef (ran)
   table <-newIORef (makeTable (fromIntegral 10) (fromIntegral 20)) 
   licznik <-newIORef 0.5
-  keyboardMouseCallback $= Just (keyboardMouse num angle pos table size)
-  idleCallback $= Just (idle pos size speed timer newBlock num angle table)
+  keyboardMouseCallback $= Just (keyboardMouse pause num angle pos table size)
+  idleCallback $= Just (idle pause pos size speed timer newBlock num angle table)
   displayCallback $= display angle pos table num
 
   
