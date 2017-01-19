@@ -1,0 +1,10 @@
+﻿@model string[]
+
+@{ 
+    foreach (var img in Model)
+    {
+        <img alt="img" src="@img"/>
+    }
+}
+
+@*<p style="color:saddlebrown; padding-top: 20px;font-size:120%">Myśl dnia: <b><i>@Model</i></b></p>*@

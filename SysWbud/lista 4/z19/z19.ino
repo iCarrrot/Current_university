@@ -76,7 +76,7 @@ void loop(void) {
     maxY=512;
     mov=0;
   }
-  if(abs(r-randomR)<20 && abs(g-randomG)<20){
+  if(abs(r-randomR)<400 && abs(g-randomG)<400){
     
     analogWrite(R,r/4);
     analogWrite(G,g/4);

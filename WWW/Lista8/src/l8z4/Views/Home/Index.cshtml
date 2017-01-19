@@ -1,0 +1,22 @@
+﻿@model l8z4.Models.Car
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FormSimple</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary()
+        <table border="1">
+            <tr><td>@Html.LabelFor(e => e.RegistrationNumber)</td><td>@Html.EditorFor(e => e.RegistrationNumber) @Html.ValidationMessageFor(model => model.RegistrationNumber)</td></tr>
+            <tr><td>@Html.LabelFor(e => e.FirstRegistrationDate)</td><td>@Html.EditorFor(e => e.FirstRegistrationDate) @Html.ValidationMessageFor(model => model.FirstRegistrationDate)</td></tr>
+            <tr><td>@Html.LabelFor(e => e.Brand)</td><td>@Html.EditorFor(e => e.Brand) @Html.ValidationMessageFor(model => model.Brand)</td></tr>
+            <tr><td>@Html.LabelFor(e => e.ProductionYear)</td><td>@Html.EditorFor(e => e.ProductionYear) @Html.ValidationMessageFor(model => model.ProductionYear)</td></tr>
+            <tr><td>@Html.LabelFor(e => e.FuelType)</td><td>@Html.EditorFor(e => e.FuelType) @Html.ValidationMessageFor(model => model.FuelType)</td></tr>
+        </table>
+        <input type="submit" />
+        @Html.AntiForgeryToken()
+    }
+</body>
+</html>
