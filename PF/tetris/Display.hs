@@ -37,6 +37,9 @@ display angle pos table ran= do
 idle ::IORef GLfloat-> IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat-> IORef GLfloat-> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IdleCallback
 
 idle pause' p size speed timer newBlock num angle table= do
+  --print (stage 5)
+
+
   sp <- get speed
   si <- get size
   t <- get timer
@@ -50,12 +53,16 @@ idle pause' p size speed timer newBlock num angle table= do
     if ((y'<=(1/10 - 1.05)) && (moduloGLFloat t sp == fromIntegral(0))) ||  (checkerY (block (randomBlock num') p' (0.05::GLfloat) angle'  )  tb (2*si) )==1 then 1 else 0
 
   nb<- get newBlock
-  --print p'
+  
  
   --if nb == 1 then print (updater tb num' p'  angle' ) else print (block (randomBlock num') p' (0.05::GLfloat) angle' ) 
-  table $~! \x -> if nb==1 then 
-    updater tb num' p'  angle' 
-    else x
+  table $~! \x -> 
+    let newtab=(deleter (1::GLfloat) x) in 
+        if nb==1 
+          then updater newtab num' p'  angle' 
+        else newtab
+
+
   pause <- get pause'
   p $~! \(x,y) ->
       if (moduloGLFloat t sp == fromIntegral(0) &&( pause <1) )||( nb==1  )then 

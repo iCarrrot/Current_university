@@ -11,7 +11,7 @@ main :: IO ()
 main = do
   (_progName, _args) <- getArgsAndInitialize
   initialDisplayMode $= [DoubleBuffered]
-  _window <- createWindow "iTetris v.0.5"
+  _window <- createWindow "iTetris v.0.6.1"
   reshapeCallback $= Just reshape
   pause <- newIORef 0.0
   angle <- newIORef 1
