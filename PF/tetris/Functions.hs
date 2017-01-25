@@ -1,9 +1,56 @@
-module Functions (unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
+module Functions (stage,check, printBlock, printBlock',printTable, unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
 
 import Graphics.Rendering.OpenGL
 import Data.IORef
 import System.Random
 import Points
+
+
+stage::GLfloat-> [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]
+stage y =
+  let stage' x y =
+      if x<10 
+        then [(x/10 -0.55,y/10-1.05,0,0,0,0)] ++ (stage' (x+1) y)
+        else []
+  in 
+    (stage' 1 y)
+
+
+reverseBlock:: GLfloat->GLfloat->GLfloat-> Char
+reverseBlock r g b 
+  |r+g+b==0 || r+g+b==3 = 'N'
+  |r+g+b ==1.5 = 'T'
+  |r==0 && g==0 && b==1 ='S'
+  |r==0 && g==1 && b==0 ='Z'
+  |r==0 && g==1 && b==1 ='O'
+  |r==1 && g==0 && b==0 ='I'
+  |r==1 && g==0 && b==1 ='J'
+  |r==1 && g==1 && b==0 ='L'
+  |otherwise = 'n'
+
+
+printTable:: [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->[(GLfloat,GLfloat,Char)]
+printTable [] = []
+printTable (((x,y),(r,g,b)):table) =
+  (x*10 +5.5,y*10+10.5,reverseBlock r g b):printTable table
+
+
+
+printBlock :: [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]->[(GLfloat,GLfloat,Char)]
+printBlock [] = []
+printBlock ((x,y,z,r,g,b):rest)=
+  (x*10 +5.5,y*10+10.5,reverseBlock r g b):printBlock rest
+
+printBlock' :: [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]->[(GLfloat,GLfloat,Char)]
+printBlock' [] = []
+printBlock' ((x,y,z,r,g,b):rest)=
+  (x,y,reverseBlock r g b):printBlock' rest
+
+
+
+
+
+
 
 unzipper :: [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->[(GLfloat,GLfloat,GLfloat, GLfloat,GLfloat,GLfloat)]
 unzipper [] = []
@@ -17,20 +64,21 @@ updater table random (x,y) angle =
       updater' list table
 
 updater' :: [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]
-updater' [] table = table
+updater' [] table = reverse table
 --updater' list [] = []
 updater' ((x,y,z,r,g,b):list) (((x1,y1),(r1,g1,b1)):table)
-  |gLabs (x-x1) < 0.05 && gLabs (y-y1) < 0.05 = (updater' list table) ++ [((x1,y1),(r,g,b))]
+  |gLabs (x-x1) < 0.05 && gLabs (y-y1) < 0.05 = (updater' list (table ++ [((x1,y1),(r,g,b))]))
   |otherwise =   updater'  ((x,y,z,r,g,b):list) (table ++ [((x1,y1),(r1,g1,b1))] )
 
 
 
 check :: (GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat) -> [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->GLfloat->GLfloat
-check (_,_,_,_,_,_) [] size = (-1)
-check (x,y,z,r,g,b) (((x1,y1),(r1,g1,b1)):table) size
-  |gLabs (x-x1) < size && gLabs (y-y1) < size && r1+g1+b1>0 && r1+g1+b1<3 = 1 
-  |gLabs (x-x1) < size && gLabs (y-y1) < size && (r1+g1+b1==0 || r1+g1+b1==3 ) = 0 
-  |otherwise = check (x,y,z,r,g,b) table size
+check (n1,n2,n3,n4,n5,n6) [] size = (-1)
+check (x,y,n1,n2,n3,n4) (((x1,y1),(r1,g1,b1)):table) size
+  --|x<
+  |gLabs (x-x1) < 0.04 && gLabs (y-y1) < 0.04 && r1+g1+b1>0 && r1+g1+b1<3 = 1 
+  |gLabs (x-x1) < 0.04 && gLabs (y-y1) < 0.04 && (r1+g1+b1<0.4 || r1+g1+b1>2.6 ) = 0 
+  |otherwise = check (x,y,n1,n2,n3,n4) table size
 
 
 checkerY :: [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->GLfloat ->GLfloat
@@ -44,8 +92,8 @@ checkerY ((x,y,z,r,g,b):list) table size
 checkerX :: [(GLfloat,GLfloat,GLfloat,GLfloat,GLfloat,GLfloat)]->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->GLfloat->GLfloat->GLfloat
 checkerX [] table _ _= 0
 checkerX ((x,y,z,r,g,b):list) (((x1,y1),(r1,g1,b1)):table) mult size
-  |check (x-size,y,z,r,g,b) table size == 1 =1
-  |check (x-size,y,z,r,g,b) table size == (-1) =(-1)
+  |check (x+mult*size,y,z,r,g,b) table size == 1 =1
+  |check (x+mult*size,y,z,r,g,b) table size == (-1) =(-1)
   |otherwise = checkerX list table  mult size
 
 

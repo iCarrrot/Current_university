@@ -47,7 +47,7 @@ idle pause' p size speed timer newBlock num angle table= do
   timer $~! \x-> moduloGLFloat (t+1) sp
   
   newBlock $~! \x -> let (_,y')=p' in
-    if ((y'<=(1/10 - 1.05)) && (moduloGLFloat t sp == fromIntegral(0))) ||  (checkerY (block (randomBlock num') p' (0.05::GLfloat) angle'  )  tb si )==1 then 1 else 0
+    if ((y'<=(1/10 - 1.05)) && (moduloGLFloat t sp == fromIntegral(0))) ||  (checkerY (block (randomBlock num') p' (0.05::GLfloat) angle'  )  tb (2*si) )==1 then 1 else 0
 
   nb<- get newBlock
   --print p'
