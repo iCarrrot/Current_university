@@ -10,8 +10,8 @@ reshape :: ReshapeCallback
 reshape size = do 
   viewport $= (Position 0 0, size)
  
-keyboardMouse :: IORef GLfloat ->IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat)  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] ->IORef GLfloat->KeyboardMouseCallback
-keyboardMouse pause ran a p tab s key Down _ _ =  
+keyboardMouse :: IORef GLfloat ->IORef GLfloat ->IORef GLfloat ->IORef GLfloat ->IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat)  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] ->IORef GLfloat->KeyboardMouseCallback
+keyboardMouse finish score pause ran nextRan a p tab s key Down _ _ =  
   case key of
     (SpecialKey KeyLeft ) -> do
                             angle <- get a
@@ -75,6 +75,8 @@ keyboardMouse pause ran a p tab s key Down _ _ =
     (Char 'p') -> do
                   pause' <- get pause
                   print pause'
+                  score' <- get score
+                  print score'
                   pause $~! \x-> if pause' <1 then 1 else 0 
     (Char ' ') -> do
                   angle <- get a
@@ -110,5 +112,5 @@ keyboardMouse pause ran a p tab s key Down _ _ =
                   --print pause'
                   pause $~! \x-> if pause' <1 then 1 else 0 
     _ -> return ()
-keyboardMouse _ _ _ _ _ _ _ _ _ _ = return ()
+keyboardMouse _ _ _ _ _ _ _ _ _ _ _ _ _ = return ()
 

@@ -1,14 +1,18 @@
 import Graphics.UI.GLUT
+import Graphics.Rendering.OpenGL
 import Data.IORef
 import Bindings
 import System.Random
 import Functions
+import System.Environment
 
 myPureFunction :: Float -> Float
 myPureFunction x = x
  
 main :: IO ()
 main = do
+  list <- getArgs
+  let speed' =  read (head(list)) :: GLfloat
   (_progName, _args) <- getArgsAndInitialize
   initialDisplayMode $= [DoubleBuffered]
   _window <- createWindow "iTetris v.0.6.1"
@@ -16,20 +20,27 @@ main = do
   pause <- newIORef 0.0
   angle <- newIORef 1
   size <- newIORef 0.05
-  speed <- newIORef 20
+  speed <- newIORef (100/speed')
   scale <- newIORef 0.5
+  score <- newIORef 0
   pos <- newIORef (0.5-0.55,2-1.05)
   timer <- newIORef (0)
   newBlock <- newIORef 0
   ran <-randomIO :: IO GLfloat
-  num <- newIORef (ran)
+  ran2 <-randomIO :: IO GLfloat
+  num <- newIORef ran
+  nextNum <- newIORef ran2
+  finish <- newIORef 0
+
   table <-newIORef (makeTable (fromIntegral 10) (fromIntegral 20)) 
   licznik <-newIORef 0.5
-  keyboardMouseCallback $= Just (keyboardMouse pause num angle pos table size)
-  idleCallback $= Just (idle pause pos size speed timer newBlock num angle table)
-  displayCallback $= display angle pos table num
-
-  
+  keyboardMouseCallback $= Just (keyboardMouse finish score pause num nextNum angle pos table size)
+  idleCallback $= Just (idle finish pause pos size speed timer newBlock num nextNum angle table score)
+  displayCallback $= display finish angle pos table num nextNum score
   mainLoop
+  print ";a;a;a\n\nn\ndd"
+  sc <-get score
+  putStrLn $ show sc
+
 
 

@@ -1,4 +1,4 @@
-module Functions (stage,check, checker, printBlock, printBlock',printTable,deleter, unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
+module Functions (stage,check, checker, printBlock, printBlock',printTable,countScore, getInt, deleter, unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
 
 import Graphics.Rendering.OpenGL
 import Data.IORef
@@ -118,12 +118,15 @@ checker ((x,y,z,r,g,b):list) table size
   |check (x,y,z,r,g,b) table size == (-1) =(-1)
   |otherwise = 0
 
-deleter :: GLfloat->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]
-deleter y table
-  |y> 20 =table
+deleter ::[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->([((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))],GLfloat)
+deleter table = deleter' 1 table 0
+
+deleter' :: GLfloat->[((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]->GLfloat->([((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))],GLfloat)
+deleter' y table score
+  |y> 20 =(table,score)
   |otherwise = if checker (stage y) table (0.05::GLfloat) ==1 
-      then deleter (y+1) (updater'' table y) 
-      else deleter (y+1) table 
+      then deleter' (y+1) (updater'' table y) (score+1)
+      else deleter' (y+1) table score
 
 
 
@@ -149,13 +152,15 @@ randomBlock x
   |x<=1 = 'Z'
   |otherwise = 'n'
 
+
+
 blockSize :: GLfloat ->GLfloat ->(GLfloat,GLfloat) 
 blockSize num 1
   |num<=0.14 =  (2,1) 
   |num<=0.28 = (1,1)  
   |num<=0.42 = (0,1) 
-  |num<=0.56 = (0,1) 
-  |num<=0.70 = (1,0) 
+  |num<=0.56 = (1,1) 
+  |num<=0.70 = (1,1) 
   |num<=0.84 = (1,1) 
   |num<=1 = (1,1) 
   |otherwise = (0,0) 
@@ -164,8 +169,8 @@ blockSize num 2
   |num<=0.14 = (0,0)
   |num<=0.28 = (1,0)
   |num<=0.42 = (0,1) 
-  |num<=0.56 = (1,1) 
-  |num<=0.70 = (1,1)
+  |num<=0.56 = (1,0) 
+  |num<=0.70 = (1,0)
   |num<=0.84 = (1,0) 
   |num<=1 = (0,1) 
   |otherwise = (0,0) 
@@ -174,8 +179,8 @@ blockSize num 3
   |num<=0.14 = (2,1) 
   |num<=0.28 = (1,1)
   |num<=0.42 = (0,1) 
-  |num<=0.56 = (1,0) 
-  |num<=0.70 = (0,1)
+  |num<=0.56 = (1,1) 
+  |num<=0.70 = (1,1)
   |num<=0.84 = (1,1) 
   |num<=1 = (1,1) 
   |otherwise = (0,0) 
@@ -184,8 +189,8 @@ blockSize num _
   |num<=0.14 = (0,0)
   |num<=0.28 = (0,1)
   |num<=0.42 = (0,1)
-  |num<=0.56 = (1,1)
-  |num<=0.70 = (1,1)
+  |num<=0.56 = (0,1)
+  |num<=0.70 = (0,1)
   |num<=0.84 = (1,0)
   |num<=1 = (0,1)
   |otherwise = (0,0)
@@ -196,6 +201,18 @@ makeTable rows colm = makeTable' rows colm rows 0
 
 
 makeTable' :: GLfloat -> GLfloat -> GLfloat-> GLfloat -> [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))]
-makeTable' 0 colm rows' x =if colm>1 then [((rows'/10 -0.55,(colm-1)/10 - 1.05),(moduloGLFloat (rows'+1+colm) 2,moduloGLFloat (rows'+1+colm) 2,moduloGLFloat (rows'+1+colm) 2))]++(makeTable' (rows'-1) (colm-1) rows' x) else []
-makeTable' rows colm rows' x = if colm>0 then [((rows/10 -0.55,colm/10 - 1.05),(moduloGLFloat (rows+colm) 2,moduloGLFloat (rows+colm) 2,moduloGLFloat (rows+colm) 2))]++(makeTable' (rows-1) colm rows' (x+1)) else []
+makeTable' 0 colm rows' x =if colm>1 then [((rows'/10 -0.55,(colm-1)/10 - 1.05),(0,0,0))]++(makeTable' (rows'-1) (colm-1) rows' x) else []
+makeTable' rows colm rows' x = if colm>0 then [((rows/10 -0.55,colm/10 - 1.05),(0,0,0))]++(makeTable' (rows-1) colm rows' (x+1)) else []
 
+getInt::String->String
+getInt x = take (length x - 2) x 
+
+
+countScore :: GLfloat -> GLfloat
+countScore x 
+  |x==0 = 0
+  |x==1 = 5
+  |x==2 = 25
+  |x==3 = 125
+  |x==4 = 625
+  |otherwise = 100000
