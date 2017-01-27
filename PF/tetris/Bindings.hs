@@ -19,7 +19,6 @@ keyboardMouse finish score pause ran nextRan a p tab s key Down _ _ =
                             pos <- get p
                             size' <- get s
                             table <- get tab
-                           -- print (printTable table)
                             let (left,right)=blockSize num angle in 
                               let size = 2*size' in
                               let (left',right')=blockSize num (moduloGLFloat (angle+1) 4) in
@@ -29,10 +28,7 @@ keyboardMouse finish score pause ran nextRan a p tab s key Down _ _ =
                                     if (x> size*left -0.35)
                                     then (x-size,y) 
                                     else ( size*left-0.45,y)
-                            
-                            print (printBlock (block (randomBlock num) pos (0.05::GLfloat) angle))
-                              
-                              
+
     (SpecialKey KeyRight) -> do
                             angle <- get a
                             num <- get ran
@@ -71,46 +67,8 @@ keyboardMouse finish score pause ran nextRan a p tab s key Down _ _ =
                             let size = 2*size' in
                               p $~! \(x,y) -> if y>(-0.95+size) then(x,y-size) else (x,-0.95)
                              -- print (blok)
-    (Char 'c') -> tab $~! \x -> makeTable (fromIntegral 10) (fromIntegral 20)
-    (Char 'p') -> do
-                  pause' <- get pause
-                  print pause'
-                  score' <- get score
-                  print score'
-                  pause $~! \x-> if pause' <1 then 1 else 0 
-    (Char ' ') -> do
-                  angle <- get a
-                  num <- get ran
-                  pos <- get p
-                  table <- get tab
-                  size' <- get s
-                  --print "Tabela"
-                  --print (printTable table)
-                  print "Blok"
-                  print (printBlock' (block (randomBlock num) pos (0.05::GLfloat) angle))
-                  print "czy jest cos obok?"
-                  let size=2*size' in
-                    print (checkerX (block (randomBlock num) pos (0.05::GLfloat) angle) table (-1::GLfloat) size)
-                  print  "rozmiar 0.1:"
-                  let (x,y)=pos in
-                    let size=2*size' in
-                      print (check (x-size,y,0,1,0,1) table size)
-                  --print  "rozmiar 0.05:"
-                  --let (x,y)=pos in
-                  --  print (check (x-size',y,0,1,0,1) table size')
-                  print  "pozycja"
-                  print pos
-
-                  let [(x1,y1,z1,r1,g1,b1),(x2,y2,z2,r2,g2,b2),(x3,y3,z3,r3,g3,b3),(x4,y4,z4,r4,g4,b4)]=(block (randomBlock num) pos (0.05::GLfloat) angle) in
-                    print (check (x1-2*size',y1,z1,r1,g1,b1) table (2*size'), check (x2-2*size',y2,z2,r2,g2,b2) table (2*size'), check (x3-2*size',y3,z3,r3,g3,b3) table (2*size'), check (x4-2*size',y4,z4,r4,g4,b4) table (2*size') )
-                  print  "tabela"
-                  print table
-                  
-
-
-                  pause' <- get pause
-                  --print pause'
-                  pause $~! \x-> if pause' <1 then 1 else 0 
+    --(Char 'c') -> tab $~! \x -> makeTable (fromIntegral 10) (fromIntegral 20)
+    (Char 'p') -> pause $~! \x-> if x <1 then 1 else 0
     _ -> return ()
 keyboardMouse _ _ _ _ _ _ _ _ _ _ _ _ _ = return ()
 

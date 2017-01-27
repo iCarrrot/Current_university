@@ -1,8 +1,8 @@
-main : Makefile p2.hs
-	ghc --make p2.hs
+main : Makefile iTetris.hs
+	ghc --make iTetris.hs
 
 .PHONY: run
 
 run:
-	ghc --make p2.hs && ./p2 10
+	./iTetris 10
 
