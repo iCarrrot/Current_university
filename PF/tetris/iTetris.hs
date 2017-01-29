@@ -6,7 +6,7 @@ import System.Random
 import Functions
 import System.Environment
 
--- TODO: speed, keyUp, keyDown
+-- TODO: keyUp make readable code
 
 main :: IO ()
 main = do
@@ -19,9 +19,9 @@ main = do
   pause <- newIORef 0.0
   angle <- newIORef 1
   size <- newIORef 0.05
-  speed <- newIORef (100/speed')
+  speed <- newIORef (level speed')
   score <- newIORef 0
-  pos <- newIORef (0.5-0.55,1.9-1.05)
+  pos <- newIORef (0.5-0.55,2.1-1.05)
   timer <- newIORef (0)
   newBlock <- newIORef 0
   ran <-randomIO :: IO GLfloat

@@ -1,4 +1,4 @@
-module Functions (stage,check, checker, printBlock, printBlock',printTable,countScore, getInt, deleter, unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
+module Functions (stage,check, checker, printBlock, printBlock',printTable,countScore,level, getInt, deleter, unzipper,updater, checkerY, checkerX, gLabs,moduloGLFloat, randomBlock, blockSize, makeTable) where
 
 import Graphics.Rendering.OpenGL
 import Data.IORef
@@ -6,6 +6,20 @@ import System.Random
 import Points
 
 
+
+level:: GLfloat -> GLfloat
+level speed 
+  |speed == 1 = 45.0
+  |speed == 2 = 37.0
+  |speed == 3 = 30.0
+  |speed == 4 = 24.0
+  |speed == 5 = 19.0
+  |speed == 6 = 15.0
+  |speed == 7 = 12.0
+  |speed == 8 = 9.0
+  |speed == 9 = 7.0
+  |speed == 10 = 5.0
+  |otherwise = 1.0
 
 
 

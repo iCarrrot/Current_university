@@ -28,7 +28,7 @@ display finish angle pos table ran nextRan score= do
           color $ Color3 0.3 0 (0.3::GLfloat)
           square 1
           color $ Color3 1 0.4392 (0::GLfloat) 
-          translate $ Vector3 (-0.55) 0.4 (0::GLfloat)
+          translate $ Vector3 (-0.55) 0.6 (0::GLfloat)
           scale 0.003 0.003 (1::GLfloat)
           renderString Roman "GAME"
 
@@ -36,22 +36,29 @@ display finish angle pos table ran nextRan score= do
         ran2 <-randomIO :: IO GLfloat
         preservingMatrix $ do
           color $ Color3 ran (ran2*4) (num*2::GLfloat) 
-          translate $ Vector3 (-0.55) (0) (0::GLfloat)
+          translate $ Vector3 (-0.55) (0.2) (0::GLfloat)
           scale 0.003 0.003 (1::GLfloat)
           renderString Roman "OVER"
 
         preservingMatrix $ do
           color $ Color3 0.5 0.5 (1::GLfloat) 
-          translate $ Vector3 (-0.7) (-0.4) (0::GLfloat)
+          translate $ Vector3 (-0.7) (-0.2) (0::GLfloat)
           scale 0.0018 0.0018 (1::GLfloat)
           renderString Roman $ "Your score is" 
 
         preservingMatrix $ do
           color $ Color3 1 0.4392 (0::GLfloat) 
-          translate $ Vector3 ( -0.3 ) (-0.9) (0::GLfloat)
+          translate $ Vector3 ( -0.3 ) (-0.7) (0::GLfloat)
           scale 0.003 0.003 (1::GLfloat)
           renderString Roman $ getInt $ show score'
        -- leaveMainLoop
+        preservingMatrix $ do
+          color $ Color3 0.9 0.5 (1::GLfloat) 
+          translate $ Vector3 (-0.55) (-0.9) (0::GLfloat)
+          scale 0.0009 0.0009 (1::GLfloat)
+          renderString Roman $ "Press F12 to exit" 
+
+
         when (finish' <2) (print score')
         finish $~! \x -> 2
     else
@@ -106,7 +113,6 @@ display finish angle pos table ran nextRan score= do
 idle ::IORef GLfloat ->IORef GLfloat-> IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat-> IORef GLfloat->IORef GLfloat-> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IORef GLfloat-> IdleCallback
 
 idle finish pause p size speed timer newBlock num nextNum angle table score= do
-  --print (stage 5)
 
 
   sp <- get speed
@@ -133,7 +139,7 @@ idle finish pause p size speed timer newBlock num nextNum angle table score= do
               then updater newtab num' p'  angle' 
             else newtab
         else x
-      score $~! \x -> if fin >0 then x else x+ 5* score' +nb
+      score $~! \x -> if fin >0 then x else x+ (5* score' +nb)*sp
 
   finish $~! \x-> if nb >0 &&  checkerX (block (randomBlock nextNum') (0.5-0.55,1.9-1.05) (0.05::GLfloat) 1) tb (2*si) 0 >0 
       then 
