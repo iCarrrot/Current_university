@@ -19,4 +19,5 @@ square' w = renderPrimitive LineLoop $ mapM_ vertex3f
 --brzegi planszy, g->grubość brzegu
 board:: GLfloat -> IO ()
 board g= renderPrimitive Quads $ mapM_ vertex3f
-	[(-0.5,-1,0),(-0.5-g,-1,0),(-0.5-g,1,0),(-0.5,1,0),(0.5,-1,0),(0.5+g,-1,0),(0.5+g,1,0),(0.5,1,0)]
+    [(-0.5,-1,0),(-0.5-g,-1,0),(-0.5-g,1,0),(-0.5,1,0),
+    (0.5,-1,0),(0.5+g,-1,0),(0.5+g,1,0),(0.5,1,0)]

@@ -35,8 +35,10 @@ main = do
   table <-newIORef (makeTable (fromIntegral 10) (fromIntegral 20)) 
   licznik <-newIORef 0.5
 
-  keyboardMouseCallback $= Just (keyboardMouse ifFinish score pause num nextNum angle pos table size)
-  idleCallback $= Just (idle ifFinish pause pos size speed timer newBlock num nextNum angle table score)
+  keyboardMouseCallback $= Just (keyboardMouse 
+    ifFinish score pause num nextNum angle pos table size)
+  idleCallback $= Just (idle 
+    ifFinish pause pos size speed timer newBlock num nextNum angle table score)
   displayCallback $= display ifFinish angle pos table num nextNum score
   
   mainLoop

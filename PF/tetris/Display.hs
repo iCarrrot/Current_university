@@ -8,7 +8,10 @@ import Points
 import System.Random
 import Functions
  
-display :: IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat) -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IORef GLfloat->IORef GLfloat-> IORef GLfloat-> DisplayCallback
+display :: IORef GLfloat ->IORef GLfloat -> IORef (GLfloat, GLfloat) 
+  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IORef GLfloat
+  ->IORef GLfloat-> IORef GLfloat-> DisplayCallback
+
 display ifFinish angle pos table ran nextRan score= do 
 
 
@@ -40,13 +43,15 @@ display ifFinish angle pos table ran nextRan score= do
 
         --Wyświetlenie wyniku
         preservingMatrix $ do
+
           color $ Color3 1 0.4392 (0::GLfloat) 
           translate $ Vector3 0.6 0 (0::GLfloat)
           scale 0.001 0.001 (1::GLfloat)
           renderString Roman $ dropLastTwo $ show score'
 
         --Wyświetlenie następnego klocka
-        forM_ (block (getBlockId nextNum) (1.3-0.55,1.5-1.05) 0.05 1 ) $ \(x,y,z,r,g,b) 
+        forM_ (block (getBlockId nextNum) (ifLongBlock nextNum) 0.05 1 ) $ 
+          \(x,y,z,r,g,b) 
           -> preservingMatrix $ do
             color $ Color3 r g b
             translate $ Vector3 x y z
@@ -65,7 +70,8 @@ display ifFinish angle pos table ran nextRan score= do
         translate $ Vector3 x' y' 0
         preservingMatrix $ do
           
-          forM_ (block (getBlockId num) (0.0,0.0) 0.05 angle' ) $ \(x,y,z,r,g,b) -> preservingMatrix $ do
+          forM_ (block (getBlockId num) (0.0,0.0) 0.05 angle' ) $ 
+           \(x,y,z,r,g,b) -> preservingMatrix $ do
             color $ Color3 r g b
             translate $ Vector3 x y z
             square (0.047)
@@ -119,9 +125,14 @@ display ifFinish angle pos table ran nextRan score= do
 
   swapBuffers
  
-idle ::IORef GLfloat ->IORef GLfloat-> IORef (GLfloat,GLfloat) ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat -> IORef GLfloat-> IORef GLfloat->IORef GLfloat-> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] -> IORef GLfloat-> IdleCallback
+idle ::IORef GLfloat ->IORef GLfloat-> IORef (GLfloat,GLfloat) 
+  ->IORef GLfloat->IORef GLfloat ->IORef GLfloat -> IORef GLfloat 
+  -> IORef GLfloat-> IORef GLfloat->IORef GLfloat
+  -> IORef [((GLfloat,GLfloat),(GLfloat,GLfloat,GLfloat))] 
+  -> IORef GLfloat-> IdleCallback
 
-idle ifFinish pause p size speed timer newBlock num nextNum angle table score= do
+idle ifFinish pause p size speed timer newBlock num nextNum angle table score= 
+ do
 
 
   speed' <- get speed
@@ -139,8 +150,10 @@ idle ifFinish pause p size speed timer newBlock num nextNum angle table score= d
   
   
   newBlock $~! \x -> let (_,y')=p' in
-    if (y'<=(1/10 - 1.05) && moduloGLfloat timer' speed' == fromIntegral 0 ) 
-      ||  (checkIfEmptyY (block (getBlockId num') p' (0.05::GLfloat) angle'  )  table' (2*size') ) == 1 
+    if (y'<=(1/10 - 1.05) && moduloGLfloat timer' (2*speed') == fromIntegral 0 ) 
+      || ( (checkIfEmptyY (block (getBlockId num') p' (0.05::GLfloat) angle'  )  
+        table' (2*size') ) == 1 && moduloGLfloat timer' (2*speed') == fromIntegral 0 )
+
         then 1 
         else 0
 
@@ -161,7 +174,8 @@ idle ifFinish pause p size speed timer newBlock num nextNum angle table score= d
 
 
   ifFinish $~! \x-> if nb >0 
-    &&  checkIfEmptyX (block (getBlockId nextNum') (0.5-0.55,1.9-1.05) (0.05::GLfloat) 1) table' (2*size') 0 >0 
+    &&  checkIfEmptyX (block (getBlockId nextNum') (0.5-0.55,1.9-1.05) 
+      (0.05::GLfloat) 1) table' (2*size') 0 >0 
       then 
         if x>1 then x else 1
       else 0
@@ -171,7 +185,8 @@ idle ifFinish pause p size speed timer newBlock num nextNum angle table score= d
   pause' <- get pause
 
   p $~! \(x,y) ->
-      if (moduloGLfloat timer' speed' == fromIntegral(0) &&( pause' <1) )||( nb==1  )
+      if (moduloGLfloat timer' speed' == fromIntegral(0) &&( pause' <1) )
+        ||( nb==1  )
         then 
           if nb <1 
             then (x,y-size'*2) 
@@ -190,6 +205,8 @@ idle ifFinish pause p size speed timer newBlock num nextNum angle table score= d
   nextNum $~! \x -> 
     if nb <1 then x else ran
 
-  timer $~! \x-> if ifFinish'>0 then x else moduloGLfloat ((1-nb)*timer'+1) speed'
+  timer $~! \x-> if ifFinish'>0 
+    then x 
+    else moduloGLfloat ((1-nb)*timer'+1) speed'
 
   postRedisplay Nothing
