@@ -1,4 +1,0 @@
-Jest zaliczany do protokołów bezstanowych (ang. stateless) z racji tego, że nie zachowuje żadnych informacji o poprzednich transakcjach z klientem (po zakończeniu transakcji wszystko "przepada")
-
-Sesja – obiekt, zapamiętujący przez pewien czas na serwerze szczegóły dotyczące połączenia z klientem. Cechą charakterystyczną sesji jest to, że przypisane do niej dane mają przeważnie charakter chwilowy, ulotny (w przeciwieństwie np. do preferencji przypisywanych do konta klienta).
-
