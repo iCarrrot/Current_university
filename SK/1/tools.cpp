@@ -10,7 +10,7 @@ bool validateIpAddress(const string &ipAddress)
     return result != 0;
 }
 
-//utworzenie z tablicy stringów linii z adresami. 
+//utworzenie z tablicy stringów linii z adresami.
 string makeIpLine(string ipString[])
 {
 	if(ipString[0]=="")
@@ -54,7 +54,6 @@ int getValue(icmphdr *icmp_header , int flag)
 			}
 			else return -1;
 			break;
-		
 	}
 	return -2;
 }
