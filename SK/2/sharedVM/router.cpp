@@ -21,9 +21,6 @@
 #define INF 4294967295
 #define YES 1
 #define  NO 0
-#define UPD_INFO 1
-#define E_NO_UPDT 2
-#define ADDED 0
 
 using namespace std;
 
@@ -38,7 +35,6 @@ struct intAddr{
   char br2;
   char br3;
   char br4;
-
 };
 struct routeRecord{
   char ip1;
@@ -73,19 +69,19 @@ int makeByteOfMask(int mask){
   }
   return byteMask;
 }
-void makeBroadcst(int *b1,int *b2,int *b3,int *b4, int mask){
+void brodadcast(int *b1,int *b2,int *b3,int *b4, int mask){
   switch ((mask+7)/8) {
     case 1:
-      *b1|=255-makeByteOfMask(mask);
+      *b1+=255-makeByteOfMask(mask);
       mask=0;
     case 2:
-      *b2|= 255- makeByteOfMask(mask);
+      *b2+= 255- makeByteOfMask(mask);
       mask=0;
     case 3:
-      *b3|= 255- makeByteOfMask(mask);
+      *b3+= 255- makeByteOfMask(mask);
       mask=0;
     case 4:
-      *b4|= 255- makeByteOfMask(mask);
+      *b4+= 255- makeByteOfMask(mask);
   }
   //printf("broadcast: %d.%d.%d.%d\n", *b1,*b2,*b3,*b4 );
 
@@ -133,8 +129,6 @@ int sendTable(int * dCNumber,vector<intAddr> * addrTable, vector<routeRecord> * 
                   + to_string(0xFF&(unsigned int)(*addrTable)[i].br2)+"."
                   + to_string(0xFF&(unsigned int)(*addrTable)[i].br3)+"."
                   + to_string(0xFF&(unsigned int)(*addrTable)[i].br4);
-    cout<<"sending for "<<sipAddr<<endl;
-    //printf("sending for %20s", sipAddr);
     const char * cipAddr = sipAddr.c_str();
     inet_pton(AF_INET,cipAddr , &server_address->sin_addr);
     for (int j = 0; j < (int)(*addrTable).size(); j++) {
@@ -164,7 +158,7 @@ void initTables(int * dCNumber, vector<intAddr>* addrTable, vector<routeRecord> 
     routeRecord temp1 =  {(char)br1, (char)br2, (char)br3, (char)br4, (char)mask, LEdistance, ifDirect, (char)via1, (char)via2, (char)via3, (char)via4};
 
     //utwórz adres rozgłoszeniowy
-    makeBroadcst(&br1,&br2,&br3,&br4,mask);
+    brodadcast(&br1,&br2,&br3,&br4,mask);
 
     intAddr temp = {(char)ip1, (char)ip2, (char)ip3, (char)ip4, (char)mask, LEdistance, (char)br1, (char)br2, (char)br3, (char)br4};
 
@@ -187,25 +181,7 @@ bool checkSender(vector<intAddr> * addrTable, char via1,char via2,char via3,char
   return 0;
 }
 
-int updateDistance ( routeRecord * newRecord, vector<intAddr> * addrTable){
-  for (size_t i = 0; i < addrTable->size(); i++) {
-    char ip1=(*addrTable)[i].br1;
-    char ip2=(*addrTable)[i].br2;
-    char ip3=(*addrTable)[i].br3;
-    char ip4=(*addrTable)[i].br4;
-    char br1=newRecord->via1;
-    char br2=newRecord->via2;
-    char br3=newRecord->via3;
-    char br4=newRecord->via4;
-    makeBroadcst((int*)&br1,(int*)&br2,(int*)&br3,(int*)&br4,newRecord->mask);
 
-    if( newRecord->ifDirect== NO && br1==ip1  &&  br2==ip2  &&  br3==ip3  &&  br4==ip4){
-      newRecord->LEdistance+=(*addrTable)[i].LEdistance;
-      return 0;
-    }
-  }
-  return 1;
-}
 int receive(int *sockfd, routeRecord * newRecord, vector<intAddr> * addrTable){
 
 
@@ -232,27 +208,12 @@ int receive(int *sockfd, routeRecord * newRecord, vector<intAddr> * addrTable){
   int distance=bswap_32(*((int*)b1));
   struct routeRecord recivedRecord = {(char)buffer[0], (char)buffer[1], (char)buffer[2], (char)buffer[3], (char)buffer[4], distance, NO, via1 , via2 , via3 , via4};
   *newRecord=recivedRecord;
-  if(updateDistance(newRecord, addrTable)){
-    printf("Nie znaleziono w tablicy!\n" );
-  }
-
   printf ("%ld-byte message: +%d.%d.%d.%d/%d distance %d, via? %d  %d.%d.%d.%d+\n", datagram_len, (unsigned char)recivedRecord.ip1,
-                (unsigned char)recivedRecord.ip2,(unsigned char)recivedRecord.ip3,(unsigned char)recivedRecord.ip4,
-                (unsigned char)recivedRecord.mask,
-                recivedRecord.LEdistance, recivedRecord.ifDirect, (unsigned char)recivedRecord.via1, (unsigned char)recivedRecord.via2,
-                (unsigned char)recivedRecord.via3, (unsigned char)recivedRecord.via4);
-
-
+    (unsigned char)recivedRecord.ip2,(unsigned char)recivedRecord.ip3,(unsigned char)recivedRecord.ip4,
+      (unsigned char)recivedRecord.mask,
+      recivedRecord.LEdistance, recivedRecord.ifDirect, (unsigned char)recivedRecord.via1, (unsigned char)recivedRecord.via2
+      , (unsigned char)recivedRecord.via3, (unsigned char)recivedRecord.via4);
   return 0;
-}
-
-void printTable(vector<routeRecord> *routeTable){
-  for (size_t i = 0; i < routeTable->size(); i++) {
-    routeRecord temp= (*routeTable)[i];
-    printf("%d.%d.%d.%d/%d distance %d", (unsigned char)temp.ip1,(unsigned char)temp.ip2,(unsigned char)temp.ip3,(unsigned char)temp.ip4,(unsigned char)temp.mask, temp.LEdistance);
-    temp.ifDirect? printf(" connected directly\n") : printf(" via %d.%d.%d.%d\n", (unsigned char)temp.via1,(unsigned char)temp.via2,(unsigned char)temp.via3,(unsigned char)temp.via4 );
-
-  }
 }
 bool checkIfSameWeb(routeRecord* r1,routeRecord* r2){
   if(r1->ip1==r2->ip1  &&  r1->ip2==r2->ip2  &&  r1->ip3==r2->ip3  &&  r1->ip4==r2->ip4 ){
@@ -261,29 +222,26 @@ bool checkIfSameWeb(routeRecord* r1,routeRecord* r2){
   return 0;
 }
 
+
 int updateTable(vector<routeRecord> *routeTable, routeRecord * newRecord){
   for (size_t i = 0; i < routeTable->size(); i++) {
     if(checkIfSameWeb(&(*routeTable)[i], newRecord) ){
-      if ((*routeTable)[i].LEdistance>newRecord->LEdistance){
+      if ((*routeTable)[i].LEdistance>newRecord->LEdistance) {
         (*routeTable)[i]=*newRecord;
-        return UPD_INFO; //1
+
       }
-      return E_NO_UPDT; //2
+
     }
+    return 0;
   }
 
-  routeTable->push_back(*newRecord);
-  return ADDED;
+
+
+  return 0;
 }
 
 
-
-
 int main(){
-  //temp vars
-    //double speeder=10;
-    int startTime =1; //=16;
-  //temp vars
 
   int dCNumber=0; //directConnectionNumber - liczba bezpośrednio podłączonych sieci
   vector<intAddr> addrTable;
@@ -301,7 +259,6 @@ int main(){
   bzero (&server_address, sizeof(server_address));
   server_address.sin_family      = AF_INET;
   server_address.sin_port        = htons(54321);
-  server_address.sin_addr.s_addr = htonl(INADDR_ANY);
   int broadcastPermission = 1;
   setsockopt (sockfd, SOL_SOCKET, SO_BROADCAST,(void *)&broadcastPermission,sizeof(broadcastPermission));
 
@@ -310,54 +267,24 @@ int main(){
 		return EXIT_FAILURE;
 	}
 
+
   routeRecord newRecord;
-
-
-  fd_set descriptors;
-  FD_ZERO (&descriptors);
-  FD_SET (sockfd, &descriptors);
-  struct timeval tv;
-  tv.tv_sec =startTime;//+ (time(0)%10);
-  tv.tv_usec = 0;
-
-
-
-
+  time_t start = time(0);
+  cout<<start<<"aaa"<<endl;
   while(1){
-    printf("Waiting for packet\n" );
-    int ready = select (sockfd+1, &descriptors, NULL, NULL, &tv);
-    //int ready = 1;
-    printf("otrzymano: %d\n",ready );
-    if (ready<0)
-		{
-			fprintf(stderr, "select error: %s\n", strerror(errno));
-			return EXIT_FAILURE;
-		}
 
-    if (ready>0){
-      printf("w kolejce jest %d pakietów\n",ready );
-      receive (&sockfd, &newRecord, &addrTable);
-      printf("I've got the message!\n" );
-      updateTable(&routeTable, &newRecord);
-      printf("I've updated the table!\n" );
-    }
-    if(ready==0){
-      //system("clear");
-      printTable(&routeTable);
-      printf("I'm sending!\n");
+    receive (&sockfd, &newRecord, &addrTable);
 
-      sendTable(&dCNumber,&addrTable, &routeTable, &server_address, &sockfd);
-
-
-      tv.tv_sec =startTime;//+ time(0)%10;
-      tv.tv_usec = 0;
-      printf("Sended\n");
-    }
-    else{
-      receive (&sockfd, &newRecord, &addrTable);
+    if(difftime( time(0), start)>17+start%10){
+        sendTable(&dCNumber,&addrTable, &routeTable, &server_address, &sockfd);
+        start = time(0);
     }
 
   }
+
+
+
+
 
   //cout<<endl<<sizeof(intAddr)<<endl;
 
