@@ -1,7 +1,7 @@
-main : Makefile zad.cpp
-	g++ -std=gnu++11 -Wall -W -O2 -static -DSPRAWDZACZKA zad.cpp -o zad
+main : Makefile D.cpp
+	g++ -std=gnu++11 -Wall -W -O2 -static -DSPRAWDZACZKA D.cpp -o D
 
 .PHONY: run
 
 run:
-	./zad < test
+	./D < test
