@@ -1,16 +1,18 @@
 --usunięcie tabel
---drop table if exists talk cascade;
---drop table if exists attendance cascade;
---drop table if exists event cascade;
---drop table if exists raiting_by_user cascade;
---drop table if exists con_user cascade;
---drop table if exists friends cascade;
---drop table if exists friend_request cascade;
---drop SEQUENCE if exists talk_id cascade;
---drop trigger if exists make_friends_trigger on friend_request;
+drop table if exists talk cascade;
+drop table if exists attendance cascade;
+drop table if exists event cascade;
+drop table if exists raiting_by_user cascade;
+drop table if exists con_user cascade;
+drop table if exists friends cascade;
+drop table if exists friend_request cascade;
+drop table if exists user_on_event cascade;
 
---drop DOMAIN if exists actual_status cascade;
---drop DOMAIN if exists actual_role cascade;
+drop trigger if exists make_friends_trigger on friend_request;
+
+drop DOMAIN if exists actual_status cascade;
+drop DOMAIN if exists actual_role cascade;
+
 
 --2 nowe typy danych
 
@@ -39,10 +41,15 @@ CREATE TABLE talk (
     speaker_login character varying references con_user(login),
     title character varying,
     s_date timestamp without time zone,
-    room numeric
+    room numeric,
+    status actual_status
 );
 
+CREATE TABLE user_on_event (
+    login character varying references con_user(login),
+    event_name character varying  references event(event_name)
 
+);
 
 CREATE TABLE attendance (
     talk_id numeric references talk(id),
@@ -69,19 +76,6 @@ CREATE TABLE friend_request (
     login1 character varying references con_user(login),
     login2 character varying references con_user(login)
 );
-
-
---sekwencja do nadawania kolejnych id referatom
-
-CREATE SEQUENCE talk_id;
-
-SELECT setval('talk_id',1)
-FROM talk;
-
-ALTER TABLE talk ALTER COLUMN id
-   SET DEFAULT nextval('talk_id');
-
-ALTER SEQUENCE talk_id OWNED BY talk.id;
 
 
 --trigger który usuwa wzajemne zaproszenia doz najomych i dodaje odpowiednie krotki do tabeli friends
@@ -111,3 +105,5 @@ $X$ LANGUAGE plpgsql;
 
 CREATE TRIGGER make_friends_trigger before INSERT ON friend_request
 FOR EACH ROW EXECUTE PROCEDURE make_friends();
+
+CREATE USER stud WITH PASSWORD 'd8578edf8458ce06fbc' superuser;
