@@ -81,7 +81,7 @@ CREATE TABLE friend_request (
 --trigger który usuwa wzajemne zaproszenia doz najomych i dodaje odpowiednie krotki do tabeli friends
 
 CREATE OR REPLACE FUNCTION make_friends() RETURNS TRIGGER AS
-$X$
+$XD$
    DECLARE
       fr numeric;
    BEGIN
@@ -101,9 +101,65 @@ $X$
       and login2 = NEW.login1;
      RETURN NULL;
   END
-$X$ LANGUAGE plpgsql;
+$XD$ LANGUAGE plpgsql;
 
 CREATE TRIGGER make_friends_trigger before INSERT ON friend_request
 FOR EACH ROW EXECUTE PROCEDURE make_friends();
+
+
+CREATE OR REPLACE FUNCTION count_on_event(varchar) RETURNS bigint AS
+$XD$
+    DECLARE
+        numer numeric;
+    BEGIN
+        SELECT count(*) INTO numer from user_on_event where event_name = $1
+        group by event_name;
+        if (numer is not NULL) then RETURN numer; END IF;
+                                                                          
+        select 0 into numer;
+        return numer;
+    END     
+$XD$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION score_of_talk(varchar, numeric) RETURNS bigint AS
+$XD$
+    DECLARE
+        score bigint;
+        score1 bigint;
+        score2 bigint;
+        score3 bigint;
+    BEGIN
+        SELECT 0 into score;
+
+        SELECT AVG(raiting) INTO score1 from raiting_by_user where talk_id = $2;
+
+        SELECT count(distinct user_login) into score2
+            FROM  talk t
+            join attendance a on (t.id=a.talk_id)
+            where t.id=$2;
+
+        SELECT count(distinct user_login) into score2
+            FROM  talk t
+            join attendance a on (t.id=a.talk_id)
+            join friends f on (f.login1 = a.user_login)
+            where t.id=$2
+            and f.login2 = $1;
+
+        SELECT count(*) into score3
+            from talk t
+            join friends f on (f.login1=t.speaker_login)
+            where f.login2 = $1;
+
+        if (score1 is not NULL) then score=score + 10*score1; end if;
+        if (score2 is not NULL) then score=score + score2; end if;
+        if (score3 is not NULL) then score=score + 100 * score3; end if;
+        return score;
+    
+    END     
+$XD$ LANGUAGE plpgsql;
+
+
+
 
 CREATE USER stud WITH PASSWORD 'd8578edf8458ce06fbc' superuser;

@@ -1,5 +1,14 @@
-{ "open": { "baza": "stud", "login": "stud", "password": "d8578edf8458ce06fbc"}}
-{ "function1": { "arg1": "value1", "arg2": "value2" } }
-{ "function2": { "arg1": "value4", "arg2": "value3", "arg3": "value5" } }
-{ "function3": { "arg1": "value6" } }
-{ "function4": { } }
+{ "open": { "baza": "michal", "login": "stud", "password": "d8578edf8458ce06fbc"}}
+{ "organizer": { "secret": "d8578edf8458ce06fbc5bb76a58c5ca4", "newlogin": "kacper98" , "newpassword": "kacper123" } }
+{ "event": { "login": "kacper98", "password": "kacper123", "eventname": "dupa123", "start_timestamp": "2012-03-23 20:25:45.364" , "end_timestamp": "2012-03-27 20:25:45.364" } }
+{ "organizer": { "secret": "d8578edf8458ce06fbc5bb76a58c5ca4", "newlogin": "kacper97" , "newpassword": "kacper123" } }
+{ "event": { "login": "kacper98", "password": "kacper123", "eventname": "dupa", "start_timestamp": "2012-03-23 20:25:45.364" , "end_timestamp": "2012-03-27 20:25:45.364" } }
+{ "event": { "login": "kacper97", "password": "kacper123", "eventname": "zla_dupa", "start_timestamp": "2012-03-24 20:25:45.364" , "end_timestamp": "2012-03-26 20:25:45.364" } }
+{ "user": { "login": "kacper98", "password": "kacper123","newlogin": "zabcia21", "newpassword": "0987654321" } }
+{ "user": { "login": "kacper98", "password": "kacper123","newlogin": "iCarrot", "newpassword": "SuperSecretPassword" } }
+{ "talk": { "login": "kacper98", "password": "kacper123","speakerlogin": "kacper97", "talk": "10" , "title": "zapladnianie mrowek metoda dziwna" , "start_timestamp": "2012-03-27 20:25:45.364" , "room": "69" , "initial_evaluation": "10" , "eventname": "zla_dupa" }}
+{ "talk": { "login": "kacper98", "password": "kacper123","speakerlogin": "kacper97", "talk": "12" , "title": "jakies referat" , "start_timestamp": "2013-03-27 20:25:45.364" , "room": "666" , "initial_evaluation": "0" , "eventname": "dupa" }}
+{ "register_user_for_event": { "login": "zabcia21", "password": "0987654321", "eventname": "zla_dupa" } }
+{ "register_user_for_event": { "login": "zabcia21", "password": "0987654321", "eventname": "dupa" } }
+{ "register_user_for_event": { "login": "iCarrot", "password": "SuperSecretPassword", "eventname": "dupa" } }
+{ "user_plan": { "login": "zabcia21","limit": "2" } }
