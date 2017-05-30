@@ -1,3 +1,5 @@
+--© Michał Martusewicz
+
 --usunięcie tabel
 drop table if exists talk cascade;
 drop table if exists attendance cascade;

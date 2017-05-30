@@ -1,3 +1,4 @@
+--© Michał Martusewicz
 INSERT INTO con_user(login,password,role) VALUES
             ('adam','student','U' ),
             ('bartek','123','U' ),
