@@ -43,18 +43,21 @@ CREATE TABLE talk (
     s_date timestamp without time zone,
     room numeric,
     status actual_status
+
 );
 
 CREATE TABLE user_on_event (
     login character varying references con_user(login),
-    event_name character varying  references event(event_name)
-
+    event_name character varying  references event(event_name),
+    PRIMARY KEY (login, event_name )
 );
 
 CREATE TABLE attendance (
     talk_id numeric references talk(id),
     user_login character varying references con_user(login),
-    a_date timestamp without time zone
+    a_date timestamp without time zone,
+    PRIMARY KEY (talk_id, user_login )
+
 );
 
 
@@ -64,17 +67,20 @@ CREATE TABLE raiting_by_user (
     talk_id numeric references talk(id),
     user_login character varying references con_user(login),
     raiting int,
-    a_date timestamp without time zone
+    a_date timestamp without time zone,
+    PRIMARY KEY (talk_id, user_login )
 );
 
 CREATE TABLE friends (
     login1 character varying references con_user(login),
-    login2 character varying references con_user(login)
+    login2 character varying references con_user(login),
+    PRIMARY KEY (login1, login2 )
 );
 
 CREATE TABLE friend_request (
     login1 character varying references con_user(login),
-    login2 character varying references con_user(login)
+    login2 character varying references con_user(login),
+    PRIMARY KEY (login1, login2 )
 );
 
 
