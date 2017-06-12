@@ -26,7 +26,7 @@
 
 \author{Michał Martusewicz 282023}
 \date{Wrocław, \today}
-\title{\textbf{Model konceptualny bazy danych na Wielką Konferencję w (zapewne) Hotelu Hilberta}}
+\title{\textbf{Baza Danych na Wielką Konferencję w (zapewne) Hotelu Hilberta}}
 
 \begin{document}
 \maketitle
@@ -45,6 +45,25 @@ Zamierzam użyć dwóch dodatkowych typów danych:
 \item Status: SET('P','W','R') - (P - Public, W - Waiting, R - Rejected)
 \item Role: SET('U','A') - (U -  User, A - Admin)
 \end{enumerate}
-Nie przewiduję usuwania danych, ze względu na dodatkowe pole 'status' w tabeli "Talk".
+Poza tym nie przewiduję usuwania danych, ze względu na dodatkowe pole 'status' w tabeli "Talk".
+
+\section{Uruchamianie programu}
+\textbf{W programie zaimplementowane są wszystkie funkcje}\\
+
+Do uruchomienia programu potrzebny jest Python z zainstalowaną biblioteką psycopg2.
+Aby zainstalować potrzebną bibliotekę należy użyć następującego polecenia:
+\begin{lstlisting}
+$ pip3 install psycopg2
+\end{lstlisting}
+Program pip3 może nie być domyślnie zainstalowany.
+W tym celu należy użyć dodatkowo polecenia:
+\begin{lstlisting}
+$ sudo apt-get install python-pip
+\end{lstlisting}
+Następnie wystarczy uruchomić program używając następującego polecenia:
+\begin{lstlisting}
+$ python program/main.py
+\end{lstlisting}
+
 
 \end{document}

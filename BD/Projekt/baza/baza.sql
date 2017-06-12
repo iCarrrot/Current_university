@@ -1,19 +1,19 @@
 --© Michał Martusewicz
 
 --usunięcie tabel
-drop table if exists talk cascade;
-drop table if exists attendance cascade;
-drop table if exists event cascade;
-drop table if exists raiting_by_user cascade;
-drop table if exists con_user cascade;
-drop table if exists friends cascade;
-drop table if exists friend_request cascade;
-drop table if exists user_on_event cascade;
+--drop table if exists talk cascade;
+--drop table if exists attendance cascade;
+--drop table if exists event cascade;
+--drop table if exists raiting_by_user cascade;
+--drop table if exists con_user cascade;
+--drop table if exists friends cascade;
+--drop table if exists friend_request cascade;
+--drop table if exists user_on_event cascade;
 
-drop trigger if exists make_friends_trigger on friend_request;
+--drop trigger if exists make_friends_trigger on friend_request;
 
-drop DOMAIN if exists actual_status cascade;
-drop DOMAIN if exists actual_role cascade;
+--drop DOMAIN if exists actual_status cascade;
+--drop DOMAIN if exists actual_role cascade;
 
 
 --2 nowe typy danych
@@ -38,9 +38,9 @@ CREATE TABLE event (
 );
 
 CREATE TABLE talk (
-    id numeric PRIMARY KEY,
-    event_name character varying references event(event_name),
-    speaker_login character varying references con_user(login),
+    id varchar PRIMARY KEY,
+    event_name character varying references event(event_name) default NULL,
+    speaker_login character varying references con_user(login) not NULL,
     title character varying,
     s_date timestamp without time zone,
     room numeric,
@@ -49,14 +49,14 @@ CREATE TABLE talk (
 );
 
 CREATE TABLE user_on_event (
-    login character varying references con_user(login),
-    event_name character varying  references event(event_name),
+    login character varying references con_user(login) not NULL,
+    event_name character varying  references event(event_name) not NULL,
     PRIMARY KEY (login, event_name )
 );
 
 CREATE TABLE attendance (
-    talk_id numeric references talk(id),
-    user_login character varying references con_user(login),
+    talk_id varchar references talk(id),
+    user_login character varying references con_user(login) not NULL,
     a_date timestamp without time zone,
     PRIMARY KEY (talk_id, user_login )
 
@@ -66,27 +66,27 @@ CREATE TABLE attendance (
 
 
 CREATE TABLE raiting_by_user (
-    talk_id numeric references talk(id),
-    user_login character varying references con_user(login),
+    talk_id varchar references talk(id),
+    user_login character varying references con_user(login) not NULL,
     raiting int,
     a_date timestamp without time zone,
     PRIMARY KEY (talk_id, user_login )
 );
 
 CREATE TABLE friends (
-    login1 character varying references con_user(login),
-    login2 character varying references con_user(login),
+    login1 character varying references con_user(login) not NULL,
+    login2 character varying references con_user(login) not NULL,
     PRIMARY KEY (login1, login2 )
 );
 
 CREATE TABLE friend_request (
-    login1 character varying references con_user(login),
-    login2 character varying references con_user(login),
+    login1 character varying references con_user(login) not NULL,
+    login2 character varying references con_user(login) not NULL,
     PRIMARY KEY (login1, login2 )
 );
 
 
---trigger który usuwa wzajemne zaproszenia doz najomych i dodaje odpowiednie krotki do tabeli friends
+--trigger który usuwa wzajemne zaproszenia do znajomych i dodaje odpowiednie krotki do tabeli friends
 
 CREATE OR REPLACE FUNCTION make_friends() RETURNS TRIGGER AS
 $XD$
@@ -123,10 +123,10 @@ $XD$
         SELECT count(*) INTO numer from user_on_event where event_name = $1
         group by event_name;
         if (numer is not NULL) then RETURN numer; END IF;
-                                                                          
+
         select 0 into numer;
         return numer;
-    END     
+    END
 $XD$ LANGUAGE plpgsql;
 
 
@@ -163,11 +163,11 @@ $XD$
         if (score2 is not NULL) then score=score + score2; end if;
         if (score3 is not NULL) then score=score + 100 * score3; end if;
         return score;
-    
-    END     
+
+    END
 $XD$ LANGUAGE plpgsql;
 
 
 
 
-CREATE USER stud WITH PASSWORD 'd8578edf8458ce06fbc' superuser;
+--CREATE USER stud WITH PASSWORD 'd8578edf8458ce06fbc' superuser ;

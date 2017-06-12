@@ -1,0 +1,20 @@
+Michał Martusewicz
+
+##########################
+Zaimplementowane są wszystkie funkcje
+##########################
+
+Uruchamianie programu
+Do uruchomienia programu potrzebny jest Python z zainstalowaną biblioteką psycopg2.
+Aby zainstalować potrzebną bibliotekę należy użyć następującego polecenia:
+
+$ pip3 install psycopg2
+
+Program pip3 może nie być domyślnie zainstalowany.
+W tym celu należy użyć dodatkowo polecenia:
+
+$ sudo apt-get install python-pip
+
+Następnie wystarczy uruchomić program używając następującego polecenia:
+
+$ python program/main.py
